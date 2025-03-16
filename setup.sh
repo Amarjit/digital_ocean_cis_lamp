@@ -124,11 +124,22 @@ sudo tee /etc/apache2/sites-available/999-block.conf > /dev/null <<EOL
 </VirtualHost>
 EOL
 
+# Create config for none https site. This is required for Certbot to work.
+echo -e "\nCreating none-HTTPS (80) vhost for domain..."
+sudo tee /etc/apache2/sites-available/001-$CERTBOT_DOMAIN.conf > /dev/null <<EOL
+<VirtualHost *:80>
+    ServerName $CERTBOT_DOMAIN
+    ServerAlias www.$CERTBOT_DOMAIN
+    DocumentRoot /var/www/html
+</VirtualHost>
+EOL
+
 # Manage sites and conf.
 echo -e "\nEnabling custom security conf and catch-all vhost..."
 sudo a2dissite 000-default.conf
-sudo a2ensite 999-block.conf
 sudo a2enconf zzz-custom.conf
+sudo a2ensite 999-block.conf
+sudo a2ensite 001-$CERTBOT_DOMAIN.conf
 
 # Start and enable Apache
 echo -e "\nAdding Apache to boot..."
