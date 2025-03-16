@@ -150,7 +150,7 @@ PHP_CUSTOM_INI_APACHE2="/etc/php/$PHP_VERSION/apache2/conf.d/99-custom.ini"
 echo -e "\nSecuring PHP..."
 echo -e "\nCreating custom PHP ini file for PHP Apache..."
 
-sudo tee $PHP_CUSTOM_INI > /dev/null <<EOF
+sudo tee $PHP_CUSTOM_INI_CLI > /dev/null <<EOF
 disable_functions = exec, shell_exec, system, passthru, popen, proc_open, curl_exec, parse_ini_file, show_source
 max_execution_time = $PHP_MAX_EXECUTION_TIMEOUT
 file_uploads = Off
