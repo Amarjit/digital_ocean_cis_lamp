@@ -204,7 +204,7 @@ echo -e "\nSetting permissions for web folder..."
 sudo chown -R www-data:www-data /var/www/html
 sudo chmod -R 755 /var/www/html
 
-# SSL Setup with Certbot
+# SSL Setup with Certbot. Will take care of creating new 443 vhost and enabling SSL. Will also add redirect to existing vhost from 80 to 443.
 echo "Installing Certbot for SSL..."
 sudo apt install certbot python3-certbot-apache -y
 sudo certbot --apache -d $CERTBOT_DOMAIN -d www.$CERTBOT_DOMAIN --agree-tos --no-eff-email --email $CERTBOX_EMAIL --non-interactive
