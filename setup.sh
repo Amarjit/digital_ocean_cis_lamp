@@ -46,7 +46,7 @@ sudo a2dismod dav_fs
 
 # Apache Security: Additional hardening. Using custom config file to avoid modifying default Apache files.
 echo -e "\nSetting up custom security conf..."
-sudo tee /etc/apache2/conf-available/999-custom.conf > /dev/null <<EOF
+sudo tee /etc/apache2/conf-available/zzz-custom.conf > /dev/null <<EOF
     # Disable directory listing (indexing).
     Options -Indexes
 
@@ -127,7 +127,7 @@ EOL
 echo -e "\nEnabling custom security conf and catch-all vhost..."
 sudo a2dissite 000-default.conf
 sudo a2ensite 999-block.conf
-sudo a2enconf 999-custom.conf
+sudo a2enconf zzz-custom.conf
 
 # Start and enable Apache
 echo -e "\nAdding Apache to boot..."
