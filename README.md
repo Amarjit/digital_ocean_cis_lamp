@@ -15,7 +15,7 @@ Make sure to check other configuration variables in the `setup.sh` file as well.
 
 ## Quickstart
 
-Follow these steps to set up the server:
+Paste the single line command. It will prompt to enter domain and email address:
     
     sudo apt install git -y && \
     cd ~ && \
@@ -24,5 +24,8 @@ Follow these steps to set up the server:
     echo "Enter your domain (e.g., example.com): " && \
     read DOMAIN && \
     sed -i "s/EXAMPLE.COM/$DOMAIN/g" setup.sh && \
+    echo "Enter your email address (e.g., example@example.com): " && \
+    read EMAIL && \
+    sed -i "s/example@example.com/$EMAIL/g" setup.sh && \
     chmod +x setup.sh && \
     ./setup.sh
