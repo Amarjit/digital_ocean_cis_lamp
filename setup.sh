@@ -63,7 +63,7 @@ sudo tee /etc/apache2/conf-available/999-custom.conf > /dev/null <<EOF
 
     # Explicitly define behavior for the main website directory
     <Directory "/var/www/html">
-        AllowOverride AllowOverride AuthConfig Limit FileInfo
+        AllowOverride AuthConfig Limit FileInfo
     </Directory>    
 
     # Disable the server signature to prevent version disclosure
