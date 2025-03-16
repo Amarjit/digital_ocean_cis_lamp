@@ -148,7 +148,7 @@ PHP_CUSTOM_INI_APACHE2="/etc/php/$PHP_VERSION/apache2/conf.d/99-custom.ini"
 
 # PHP Security: Additional Hardening
 echo -e "\nSecuring PHP..."
-echo -e "\nCreating custom PHP ini file for PHP Apache..."
+echo -e "\nCreating custom PHP ini file for PHP CLI..."
 
 sudo tee $PHP_CUSTOM_INI_CLI > /dev/null <<EOF
 disable_functions = exec, shell_exec, system, passthru, popen, proc_open, curl_exec, parse_ini_file, show_source
@@ -175,7 +175,7 @@ error_log = /var/log/php_errors.log
 EOF
 
 echo -e "\nCreating custom PHP ini file for PHP Apache..."
-cp $PHP_CUSTOM_INI $PHP_CUSTOM_INI_APACHE2
+cp $PHP_CUSTOM_INI_CLI $PHP_CUSTOM_INI_APACHE2
 
 sudo chmod 700 /var/lib/php/sessions
 sudo chown www-data:www-data /var/lib/php/sessions
