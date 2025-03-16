@@ -16,16 +16,15 @@ Make sure to check other configuration variables in the `setup.sh` file as well.
 ## Quickstart
 
 Paste the single line command. It will prompt to enter domain and email address:
-    
+    echo "Enter your domain (e.g., example.com): " && \
+    read DOMAIN && \
+    echo "Enter your email address: " && \
+    read EMAIL && \
     sudo apt install git -y && \
     cd ~ && \
     git clone https://github.com/Amarjit/digital_ocean_cis_lamp.git && \
     cd digital_ocean_cis_lamp && \
-    echo "Enter your domain (e.g., example.com): " && \
-    read DOMAIN && \
     sed -i "s/EXAMPLE.COM/$DOMAIN/g" setup.sh && \
-    echo "Enter your email address (e.g., example@example.com): " && \
-    read EMAIL && \
     sed -i "s/example@example.com/$EMAIL/g" setup.sh && \
     chmod +x setup.sh && \
     ./setup.sh
