@@ -30,6 +30,7 @@ sudo apt install apache2 -y
 echo -e "\nEnabling required Apache modules..."
 sudo a2enmod headers
 sudo a2enmod rewrite
+sudo a2enmod ssl
 
 # Apache Security: Disable unnecessary modules.
 echo -e "\nSecuring Apache..."
