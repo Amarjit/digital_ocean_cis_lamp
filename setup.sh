@@ -2,7 +2,7 @@
 
 # Env.
 # Apache and PHP need to be in sync with post sizes and timeouts, otherwise you will get weird behaviour.
-APACHE_MAX_POST_SIZE="1M"      # Max POST size Apache will accept.
+APACHE_MAX_POST_SIZE=1048576   # Max POST size Apache will accept.
 PHP_MAX_POST_SIZE="1M"         # Max POST size PHP will accept.
 PHP_MAX_UPLOAD_SIZE="500k"     # Should be lower than post size. This is the maximum size of a file that can be uploaded.
 APACHE_MAX_TIMEOUT="60"        # Apache timeout should be higher than PHP timeout. This involves waiting connections, reading requests, sending responses, waiting for PHP, etc.
@@ -52,8 +52,19 @@ sudo tee /etc/apache2/conf-available/999-custom.conf > /dev/null <<EOF
     # Allow symbolic links to be followed.
     Options +FollowSymLinks
 
-    # Prevent .htaccess from overriding configuration settings
-    AllowOverride None
+    # Prevent .htaccess from overriding configuration settings. Allow autentication, access control, and mod_rewrite.
+    # Block .htaccess overrides globally
+    <Directory />
+        AllowOverride None
+    </Directory>    
+    <Directory "/var/www/html">
+        AllowOverride AuthConfig Limit FileInfo
+    </Directory>
+
+    # Explicitly define behavior for the main website directory
+    <Directory "/var/www/html">
+        AllowOverride AllowOverride AuthConfig Limit FileInfo
+    </Directory>    
 
     # Disable the server signature to prevent version disclosure
     ServerSignature Off
