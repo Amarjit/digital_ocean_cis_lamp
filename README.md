@@ -17,10 +17,12 @@ Make sure to check other configuration variables in the `setup.sh` file as well.
 
 Follow these steps to set up the server:
     
-    sudo apt install git -y &&
-    cd ~ &&
-    git clone https://github.com/Amarjit/digital_ocean_cis_lamp.git &&
-    cd digital_ocean_cis_lamp &&
-    sed -i "s/EXAMPLE.COM/MY-DOMAIN.COM/g" setup.sh &&
-    chmod +x setup.sh &&
+    sudo apt install git -y && \
+    cd ~ && \
+    git clone https://github.com/Amarjit/digital_ocean_cis_lamp.git && \
+    cd digital_ocean_cis_lamp && \
+    echo "Enter your domain (e.g., example.com): " && \
+    read DOMAIN && \
+    sed -i "s/EXAMPLE.COM/$DOMAIN/g" setup.sh && \
+    chmod +x setup.sh && \
     ./setup.sh
