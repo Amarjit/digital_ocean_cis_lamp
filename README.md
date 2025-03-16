@@ -16,6 +16,7 @@ Make sure to check other configuration variables in the `setup.sh` file as well.
 ## Quickstart
 
 Paste the single line command. It will prompt to enter domain and email address:
+
     echo "Enter your domain (e.g., example.com): " && \
     read DOMAIN && \
     echo "Enter your email address: " && \
