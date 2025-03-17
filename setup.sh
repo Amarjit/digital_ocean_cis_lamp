@@ -205,7 +205,7 @@ sudo chown -R www-data:www-data /var/www/html
 sudo chmod -R 755 /var/www/html
 
 # SSL Setup with Certbot. Will take care of creating new 443 vhost and enabling SSL. Will also add redirect to existing vhost from 80 to 443.
-echo "Installing Certbot for SSL..."
+echo -e "\n 🟩  Installing Certbot for SSL..."
 sudo apt install certbot python3-certbot-apache -y
 sudo certbot --apache -d $CERTBOT_DOMAIN -d www.$CERTBOT_DOMAIN --agree-tos --no-eff-email --email $CERTBOX_EMAIL --non-interactive
 
@@ -215,7 +215,7 @@ TMP_CERTBOT_SSL_VHOST_FILEPATH="/etc/apache2/sites-available/001-$CERTBOT_DOMAIN
 sudo sed -i '/DocumentRoot \/var\/www\/html/a \\nRewriteEngine On\nRewriteCond %{HTTP_HOST} ^www\\.(.*)$ [NC]\nRewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]\n' $TMP_CERTBOT_SSL_VHOST_FILEPATH
 
 # Enable Certbot auto-renewal
-echo "Enabling Certbot auto-renewal..."
+echo -e "\n 🟩  Enabling Certbot auto-renewal..."
 sudo systemctl enable certbot.timer
 sudo systemctl start certbot.timer
 sudo certbot renew --dry-run
