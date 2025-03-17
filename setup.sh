@@ -19,22 +19,22 @@ CERTBOT_DOMAIN="EXAMPLE.COM"        # Domain to get SSL certificate for.
 CERTBOX_EMAIL="example@example.com" # Email to register with Certbot. Required for renewal notifications. 
 
 # Update system. Non-interactive and upgrade all packages regardless of custom versions.
-echo -e "\nUpdating system..."
+echo -e "\n 🟩  Updating system..."
 sudo DEBIAN_FRONTEND=noninteractive apt update && sudo DEBIAN_FRONTEND=noninteractive apt full-upgrade -y
 
 # Install Apache
-echo -e "\nInstalling Apache..."
+echo -e "\n 🟩  Installing Apache..."
 sudo apt install apache2 -y
 
 # Apache enable required modules.
-echo -e "\nEnabling required Apache modules..."
+echo -e "\n 🟩  Enabling required Apache modules..."
 sudo a2enmod headers
 sudo a2enmod rewrite
 sudo a2enmod ssl
 
 # Apache Security: Disable unnecessary modules.
-echo -e "\nSecuring Apache..."
-echo -e "\nDisabling unnecessary Apache modules..."
+echo -e "\n 🟩  Securing Apache..."
+echo -e "\n 🟩  Disabling unnecessary Apache modules..."
 sudo a2dismod userdir
 sudo a2dismod status
 sudo a2dismod info
@@ -46,7 +46,7 @@ sudo a2dismod dav
 sudo a2dismod dav_fs
 
 # Apache Security: Additional hardening. Using custom config file to avoid modifying default Apache files.
-echo -e "\nSetting up custom security conf..."
+echo -e "\n 🟩  Setting up custom security conf..."
 sudo tee /etc/apache2/conf-available/zzz-custom.conf > /dev/null <<EOF
     # Disable directory listing (indexing).
     Options -Indexes
@@ -107,7 +107,7 @@ sudo tee /etc/apache2/conf-available/zzz-custom.conf > /dev/null <<EOF
 EOF
 
 # Apache Catch All Virtual Host - Apache serves default website from /var/www for unmatched vhosts. Blocks Apache serving default. (e.g. non-defined www). 999 for last rule
-echo -e "\nCreating catch-all vhost to reject unmatched requests..."
+echo -e "\n 🟩  Creating catch-all vhost to reject unmatched requests..."
 sudo tee /etc/apache2/sites-available/999-block.conf > /dev/null <<EOL
 <VirtualHost *:80>
     ServerName _
@@ -125,7 +125,7 @@ sudo tee /etc/apache2/sites-available/999-block.conf > /dev/null <<EOL
 EOL
 
 # Create config for none https site. This is required for Certbot to work.
-echo -e "\nCreating none-HTTPS (80) vhost for domain..."
+echo -e "\n 🟩  Creating none-HTTPS (80) vhost for domain..."
 sudo tee /etc/apache2/sites-available/001-$CERTBOT_DOMAIN.conf > /dev/null <<EOL
 <VirtualHost *:80>
     ServerName $CERTBOT_DOMAIN
@@ -135,22 +135,22 @@ sudo tee /etc/apache2/sites-available/001-$CERTBOT_DOMAIN.conf > /dev/null <<EOL
 EOL
 
 # Manage sites and conf.
-echo -e "\nEnabling custom security conf and catch-all vhost..."
+echo -e "\n 🟩  Enabling custom security conf and catch-all vhost..."
 sudo a2dissite 000-default.conf
 sudo a2enconf zzz-custom.conf
 sudo a2ensite 999-block.conf
 sudo a2ensite 001-$CERTBOT_DOMAIN.conf
 
 # Start and enable Apache
-echo -e "\nAdding Apache to boot..."
+echo -e "\n 🟩  Adding Apache to boot..."
 sudo systemctl enable apache2
 
 # Start Apache
-echo -e "\nStarting Apache..."
+echo -e "\n 🟩  Starting Apache..."
 sudo systemctl start apache2
 
 # Install PHP
-echo -e "\nInstalling PHP..."
+echo -e "\n 🟩  Installing PHP..."
 sudo apt install php libapache2-mod-php -y
 
 # Get the active PHP version
@@ -159,8 +159,8 @@ PHP_CUSTOM_INI_CLI="/etc/php/$PHP_VERSION/cli/conf.d/99-custom.ini"
 PHP_CUSTOM_INI_APACHE2="/etc/php/$PHP_VERSION/apache2/conf.d/99-custom.ini"
 
 # PHP Security: Additional Hardening
-echo -e "\nSecuring PHP..."
-echo -e "\nCreating custom PHP ini file for PHP CLI..."
+echo -e "\n 🟩  Securing PHP..."
+echo -e "\n 🟩  Creating custom PHP ini file for PHP CLI..."
 
 sudo tee $PHP_CUSTOM_INI_CLI > /dev/null <<EOF
 disable_functions = exec, shell_exec, system, passthru, popen, proc_open, curl_exec, parse_ini_file, show_source
@@ -186,21 +186,21 @@ log_errors = On
 error_log = /var/log/php_errors.log
 EOF
 
-echo -e "\nCreating custom PHP ini file for PHP Apache..."
+echo -e "\n 🟩  Creating custom PHP ini file for PHP Apache..."
 cp $PHP_CUSTOM_INI_CLI $PHP_CUSTOM_INI_APACHE2
 
 sudo chmod 700 /var/lib/php/sessions
 sudo chown www-data:www-data /var/lib/php/sessions
 
 # Restart Apache to apply PHP settings
-echo -e "\nRestarting Apache to apply PHP settings..."
+echo -e "\n 🟩  Restarting Apache to apply PHP settings..."
 sudo systemctl restart apache2
 
 # Create a test PHP file
 #echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php > /dev/null
 
 # Adjust permissions
-echo -e "\nSetting permissions for web folder..."
+echo -e "\n 🟩  Setting permissions for web folder..."
 sudo chown -R www-data:www-data /var/www/html
 sudo chmod -R 755 /var/www/html
 
@@ -210,7 +210,7 @@ sudo apt install certbot python3-certbot-apache -y
 sudo certbot --apache -d $CERTBOT_DOMAIN -d www.$CERTBOT_DOMAIN --agree-tos --no-eff-email --email $CERTBOX_EMAIL --non-interactive
 
 # Add SSL www redirect to none-www. This is required for SEO and security.
-echo -e "\nAdding SSL www redirect to none-www..."
+echo -e "\n 🟩  Adding SSL www redirect to none-www..."
 TMP_CERTBOT_SSL_VHOST_FILEPATH="/etc/apache2/sites-available/001-$CERTBOT_DOMAIN-le-ssl.conf"
 sudo sed -i '/DocumentRoot \/var\/www\/html/a \\nRewriteEngine On\nRewriteCond %{HTTP_HOST} ^www\\.(.*)$ [NC]\nRewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]\n' $TMP_CERTBOT_SSL_VHOST_FILEPATH
 
@@ -220,4 +220,7 @@ sudo systemctl enable certbot.timer
 sudo systemctl start certbot.timer
 sudo certbot renew --dry-run
 
-echo -e "\nLAMP stack setup complete."
+echo -e "\n ✅  LAMP stack setup complete."
+
+# Check if reboot is required. If file exists, reboot.
+if [ -f /var/run/reboot-required ]; then echo -e "\n ⚠️  Reboot required ⚠️"; fi
