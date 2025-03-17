@@ -211,7 +211,7 @@ sudo certbot --apache -d $CERTBOT_DOMAIN -d www.$CERTBOT_DOMAIN --agree-tos --no
 
 # Add SSL www redirect to none-www. This is required for SEO and security.
 echo -e "\nAdding SSL www redirect to none-www..."
-TMP_CERTBOT_SSL_VHOST_FILEPATH = /etc/apache2/sites-available/001-$CERTBOT_DOMAIN-le-ssl.conf
+TMP_CERTBOT_SSL_VHOST_FILEPATH="/etc/apache2/sites-available/001-$CERTBOT_DOMAIN-le-ssl.conf"
 sudo sed -i '/DocumentRoot \/var\/www\/html/a \\nRewriteEngine On\nRewriteCond %{HTTP_HOST} ^www\\.(.*)$ [NC]\nRewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]\n' $TMP_CERTBOT_SSL_VHOST_FILEPATH
 
 # Enable Certbot auto-renewal
