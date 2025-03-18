@@ -51,21 +51,19 @@ sudo tee /etc/apache2/conf-available/zzz-custom.conf > /dev/null <<EOF
     # Default server.
     ServerName 127.0.0.1
 
-    # Disable directory listing (indexing).
-    Options -Indexes
-
-    # Allow symbolic links to be followed.
-    Options +FollowSymLinks
-
     # Prevent .htaccess from overriding configuration settings. Allow autentication, access control, and mod_rewrite.
     # Block .htaccess overrides globally
     <Directory />
         AllowOverride None
+        Options -Indexes
+        Options -FollowSymLinks
     </Directory>    
 
     # Explicitly define behavior for the main website directory
     <Directory "/var/www/html">
         AllowOverride AuthConfig Limit FileInfo
+        Options -Indexes
+        Options +FollowSymLinks
     </Directory>    
 
     # Disable the server signature to prevent version disclosure
