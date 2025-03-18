@@ -48,6 +48,9 @@ sudo a2dismod dav_fs
 # Apache Security: Additional hardening. Using custom config file to avoid modifying default Apache files.
 echo -e "\n 🟩  Setting up custom security conf..."
 sudo tee /etc/apache2/conf-available/zzz-custom.conf > /dev/null <<EOF
+    # Default server.
+    ServerName 127.0.0.1
+
     # Disable directory listing (indexing).
     Options -Indexes
 
