@@ -59,9 +59,6 @@ sudo tee /etc/apache2/conf-available/zzz-custom.conf > /dev/null <<EOF
     <Directory />
         AllowOverride None
     </Directory>    
-    <Directory "/var/www/html">
-        AllowOverride AuthConfig Limit FileInfo
-    </Directory>
 
     # Explicitly define behavior for the main website directory
     <Directory "/var/www/html">
