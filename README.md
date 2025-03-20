@@ -7,6 +7,7 @@ This repository provides a quick setup for a LAMP stack with optimized settings 
 - A server running Debian 12 (or similar Linux distribution)
 - Access to the server via SSH
 - A registered domain for use with Certbot (for SSL)
+- git required to pulldown repository
 
 ## Configuration
 
@@ -14,6 +15,10 @@ Before running the setup, ensure that the configuration variables at the top of 
 Make sure to check other configuration variables in the `setup.sh` file as well. The script has been tuned for low-footprint websites.
 
 ## Quickstart
+
+Check and install git:
+
+    command -v git >/dev/null 2>&1 || { sudo apt update && sudo apt install -y git; }
 
 Paste the single line command. It will prompt to enter domain and email address:
 
