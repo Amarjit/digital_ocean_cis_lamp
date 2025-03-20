@@ -25,7 +25,7 @@ Paste the single line command. It will prompt to enter domain and email address:
     cd ~ && \
     git clone https://github.com/Amarjit/digital_ocean_cis_lamp.git && \
     cd digital_ocean_cis_lamp && \
-    sed -i "s/EXAMPLE.COM/$DOMAIN/g" setup.sh && \
-    sed -i "s/example@example.com/$EMAIL/g" setup.sh && \
+    sed -i "s/EXAMPLE.COM/$DOMAIN/g" .env && \
+    sed -i "s/example@example.com/$EMAIL/g" .env && \
     chmod +x setup.sh && \
     ./setup.sh
