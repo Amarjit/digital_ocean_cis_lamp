@@ -1,6 +1,6 @@
 # Install PHP
 echo -e "\n 🟩  Installing PHP..."
-sudo apt install php libapache2-mod-php -y
+apt install php libapache2-mod-php -y
 
 # Get the active PHP version
 PHP_VERSION=$(php -r "echo PHP_VERSION;" | cut -d'.' -f1,2)
@@ -45,7 +45,7 @@ chown www-data:www-data /var/lib/php/sessions
 # Reload if Apache available
 if command -v apache2 >/dev/null 2>&1; then
     echo -e "\n 🟩  Reloading Apache config..."
-    sudo systemctl reload apache2
+     systemctl reload apache2
 fi
 
 echo -e "\n ✅  PHP complete."
