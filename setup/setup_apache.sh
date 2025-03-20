@@ -119,7 +119,10 @@ a2ensite 001-$DOMAIN.conf
 
 # Create web folder specific to domain.
 echo -e "\n 🟩  Creating web folder for domain..."
-mkdir /var/www/html/$DOMAIN/public
+mkdir -p /var/www/html/$DOMAIN/public
+
+# Set permissions for domain folder.
+echo -e "\n 🟩  Setting permissions for domain folder..."
 chown -R www-data:www-data /var/www/html/$DOMAIN
 chmod -R 755 /var/www/html/$DOMAIN
 
