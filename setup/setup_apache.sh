@@ -35,13 +35,6 @@ tee /etc/apache2/conf-available/zzz-custom.conf > /dev/null <<EOF
         Options -FollowSymLinks
     </Directory>    
 
-    # Explicitly define behavior for the main website directory
-    <Directory "/var/www">
-        AllowOverride AuthConfig Limit FileInfo
-        Options -Indexes
-        Options +FollowSymLinks
-    </Directory>    
-
     # Disable the server signature to prevent version disclosure
     ServerSignature Off
 
@@ -107,6 +100,13 @@ tee /etc/apache2/sites-available/001-$DOMAIN.conf > /dev/null <<EOL
 
     # Public folder should contain servable files. e.g. index.php. Then domain folder can be used for configuration files, logs, deployment, etc.
     DocumentRoot /var/www/$DOMAIN/public
+
+    # Explicitly define behavior for the main website directory
+    <Directory "/var/www/$DOMAIN/public">
+        AllowOverride AuthConfig Limit FileInfo
+        Options -Indexes
+        Options +FollowSymLinks
+    </Directory>        
 </VirtualHost>
 EOL
 
