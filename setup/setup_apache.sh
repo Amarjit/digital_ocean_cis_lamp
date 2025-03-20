@@ -36,7 +36,7 @@ tee /etc/apache2/conf-available/zzz-custom.conf > /dev/null <<EOF
     </Directory>    
 
     # Explicitly define behavior for the main website directory
-    <Directory "/var/www/html">
+    <Directory "/var/www">
         AllowOverride AuthConfig Limit FileInfo
         Options -Indexes
         Options +FollowSymLinks
@@ -106,7 +106,7 @@ tee /etc/apache2/sites-available/001-$DOMAIN.conf > /dev/null <<EOL
     ServerAlias www.$DOMAIN
 
     # Public folder should contain servable files. e.g. index.php. Then domain folder can be used for configuration files, logs, deployment, etc.
-    DocumentRoot /var/www/html/$DOMAIN/public
+    DocumentRoot /var/www/$DOMAIN/public
 </VirtualHost>
 EOL
 
@@ -119,21 +119,25 @@ a2ensite 001-$DOMAIN.conf
 
 # Create web folder specific to domain.
 echo -e "\n 🟩  Creating web folder for domain..."
-mkdir -p /var/www/html/$DOMAIN/public
+mkdir -p /var/www/$DOMAIN/public
 
 # Set permissions for domain folder.
 echo -e "\n 🟩  Setting permissions for domain folder..."
-chown -R www-data:www-data /var/www/html/$DOMAIN
-chmod -R 755 /var/www/html/$DOMAIN
+chown -R www-data:www-data /var/www/$DOMAIN
+chmod -R 755 /var/www/$DOMAIN
 
 # Move default index.html to domain folder.
 echo -e "\n 🟩  Moving default index.html to domain folder..."
-mv /var/www/html/index.html /var/www/html/$DOMAIN/public/index.html
+mv /var/www/html/index.html /var/www/$DOMAIN/public/index.html
+
+# Delete html folder. html folders are now public belong to domain folders.
+echo -e "\n 🟩  Deleting default html folder...
+rm -rf /var/www/html"
 
 # Adjust permissions
 echo -e "\n 🟩  Setting permissions for web folder..."
-chown -R www-data:www-data /var/www/html
-chmod -R 755 /var/www/html
+chown -R www-data:www-data /var/www
+chmod -R 755 /var/www
 
 # Start and enable Apache
 echo -e "\n 🟩  Adding Apache to boot..."

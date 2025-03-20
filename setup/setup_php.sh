@@ -11,7 +11,7 @@ PHP_CUSTOM_INI_APACHE2="/etc/php/$PHP_VERSION/apache2/conf.d/99-custom.ini"
 echo -e "\n 🟩  Securing PHP..."
 echo -e "\n 🟩  Creating custom PHP ini file for PHP CLI..."
 
-CUSTOM_DOMAIN_OPEN_BASEDIR="/var/www/html/$DOMAIN/public" # Restrict PHP to the main folders and websites.
+CUSTOM_DOMAIN_OPEN_BASEDIR="/var/www/$DOMAIN/public" # Restrict PHP to the main folders and websites.
 tee $PHP_CUSTOM_INI_CLI > /dev/null <<EOF
     disable_functions = exec, shell_exec, system, passthru, popen, proc_open, curl_exec, parse_ini_file, show_source
     max_execution_time = $PHP_MAX_EXECUTION_TIMEOUT
