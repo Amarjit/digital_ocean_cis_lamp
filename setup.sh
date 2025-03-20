@@ -128,7 +128,9 @@ sudo tee /etc/apache2/sites-available/001-$CERTBOT_DOMAIN.conf > /dev/null <<EOL
 <VirtualHost *:80>
     ServerName $CERTBOT_DOMAIN
     ServerAlias www.$CERTBOT_DOMAIN
-    DocumentRoot /var/www/html
+
+    # Public folder should contain servable files. e.g. index.php. Then domain folder can be used for configuration files, logs, deployment, etc.
+    DocumentRoot /var/www/html/$CERTBOT_DOMAIN/public
 </VirtualHost>
 EOL
 
@@ -138,6 +140,16 @@ sudo a2dissite 000-default.conf
 sudo a2enconf zzz-custom.conf
 sudo a2ensite 999-block.conf
 sudo a2ensite 001-$CERTBOT_DOMAIN.conf
+
+# Create web folder specific to domain.
+echo -e "\n 🟩  Creating web folder for domain..."
+sudo mkdir /var/www/html/$CERTBOT_DOMAIN/public
+chown -R www-data:www-data /var/www/html/$CERTBOT_DOMAIN
+chmod -R 755 /var/www/html/$CERTBOT_DOMAIN
+
+# Move default index.html to domain folder.
+echo -e "\n 🟩  Moving default index.html to domain folder..."
+sudo mv /var/www/html/index.html /var/www/html/$CERTBOT_DOMAIN/public/index.html
 
 # Start and enable Apache
 echo -e "\n 🟩  Adding Apache to boot..."
@@ -160,6 +172,7 @@ PHP_CUSTOM_INI_APACHE2="/etc/php/$PHP_VERSION/apache2/conf.d/99-custom.ini"
 echo -e "\n 🟩  Securing PHP..."
 echo -e "\n 🟩  Creating custom PHP ini file for PHP CLI..."
 
+CUSTOM_DOMAIN_OPEN_BASEDIR="/var/www/html/$CERTBOT_DOMAIN/public" # We need to restrict PHP to the main folders and websites.
 sudo tee $PHP_CUSTOM_INI_CLI > /dev/null <<EOF
 disable_functions = exec, shell_exec, system, passthru, popen, proc_open, curl_exec, parse_ini_file, show_source
 max_execution_time = $PHP_MAX_EXECUTION_TIMEOUT
@@ -178,7 +191,7 @@ session.cookie_httponly = 1
 session.use_only_cookies = 1
 session.save_path = "/var/lib/php/sessions"
 session.gc_maxlifetime = $PHP_GC_SESSION_LIFETIME
-open_basedir = "/var/www:/tmp:/var/lib/php/sessions"
+open_basedir = "$CUSTOM_DOMAIN_OPEN_BASEDIR:/tmp:/var/lib/php/sessions"
 memory_limit = $PHP_MEMORY_LIMIT
 log_errors = On
 error_log = /var/log/php_errors.log
