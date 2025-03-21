@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # SSL Setup with Certbot. Will take care of creating new 443 vhost and enabling SSL. Will also add redirect to existing vhost from 80 to 443.
 echo -e "\n 🟩  Installing Certbot for SSL..."
 apt install certbot python3-certbot-apache -y

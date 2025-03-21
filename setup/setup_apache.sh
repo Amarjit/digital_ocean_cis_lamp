@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Install Apache
 echo -e "\n 🟩  Installing Apache..."
 apt install apache2 -y

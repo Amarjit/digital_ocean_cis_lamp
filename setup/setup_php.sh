@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Install PHP
 echo -e "\n 🟩  Installing PHP..."
 apt install php libapache2-mod-php -y
