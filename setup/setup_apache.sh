@@ -103,6 +103,13 @@ tee /etc/apache2/sites-available/001-$DOMAIN.conf > /dev/null <<EOL
     # Public folder should contain servable files. e.g. index.php. Then domain folder can be used for configuration files, logs, deployment, etc.
     DocumentRoot /var/www/$DOMAIN/public
 
+    ## Main Apache logs /var/logs/apache2/
+    # Custom access log.
+    CustomLog /var/www/$DOMAIN/logs/access.log combined
+
+    # Custom error log.
+    ErrorLog /var/www/$DOMAIN/logs/error.log
+
     # Explicitly define behavior for the main website directory
     <Directory "/var/www/$DOMAIN/public">
         AllowOverride AuthConfig Limit FileInfo
@@ -140,6 +147,12 @@ rm -rf /var/www/html"
 echo -e "\n 🟩  Setting permissions for web folder..."
 chown -R www-data:www-data /var/www
 chmod -R 755 /var/www
+
+# Create domain log folder.
+echo -e "\n 🟩  Creating log folder for domain...
+mkdir -p /var/www/$DOMAIN/logs
+chown -R www-data:www-data /var/www/$DOMAIN/logs
+chmod -R 700 /var/www/$DOMAIN/logs"
 
 # Start and enable Apache
 echo -e "\n 🟩  Adding Apache to boot..."
