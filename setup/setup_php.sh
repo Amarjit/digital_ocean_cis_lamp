@@ -13,8 +13,9 @@ PHP_CUSTOM_INI_APACHE2="/etc/php/$PHP_VERSION/apache2/conf.d/99-custom.ini"
 echo -e "\n 🟩  Securing PHP..."
 echo -e "\n 🟩  Creating custom PHP ini file for PHP CLI..."
 
-CUSTOM_DOMAIN_OPEN_BASEDIR="/var/www/$DOMAIN/public" # Restrict PHP to the main folders and websites.
-CUSTOM_LOGPATH_OPEN_BASEDIR="/var/www/$DOMAIN/logs"
+CUSTOM_DOMAIN_OPEN_BASEDIR="/var/www/$DOMAIN/public"     # Restrict PHP to the main folders and websites.
+CUSTOM_LOGPATH_OPEN_BASEDIR="/var/www/$DOMAIN/logs"      # Log files.
+CUSTOM_DEPLOY_FLAG_PATH="/var/www/$DOMAIN/deploy/flags"  # Only required for deploy automation flag.
 tee $PHP_CUSTOM_INI_CLI > /dev/null <<EOF
     disable_functions = exec, shell_exec, system, passthru, popen, proc_open, curl_exec, parse_ini_file, show_source
     max_execution_time = $PHP_MAX_EXECUTION_TIMEOUT
@@ -33,7 +34,7 @@ tee $PHP_CUSTOM_INI_CLI > /dev/null <<EOF
     session.use_only_cookies = 1
     session.save_path = "/var/lib/php/sessions"
     session.gc_maxlifetime = $PHP_GC_SESSION_LIFETIME
-    open_basedir = "$CUSTOM_DOMAIN_OPEN_BASEDIR:$CUSTOM_LOGPATH_OPEN_BASEDIR:/tmp:/var/lib/php/sessions"
+    open_basedir = "$CUSTOM_DOMAIN_OPEN_BASEDIR:$CUSTOM_LOGPATH_OPEN_BASEDIR:$CUSTOM_DEPLOY_FLAG_PATH:/tmp:/var/lib/php/sessions"
     memory_limit = $PHP_MEMORY_LIMIT
     log_errors = On
     error_log = /var/log/php_errors.log
