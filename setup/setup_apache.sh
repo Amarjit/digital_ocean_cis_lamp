@@ -141,30 +141,30 @@ rm -rf /var/www/html"
 # Adjust permissions
 echo -e "\n 🟩  Setting permissions for web folder..."
 chown -R www-data:www-data /var/www
-chmod -R 100 /var/www
+chmod -R 100 /var/www # execute-only
 
 # Set permissions for domain folder.
 echo -e "\n 🟩  Setting permissions for domain folder..."
 chown -R www-data:www-data /var/www/$DOMAIN
-chmod -R 100 /var/www/$DOMAIN
+chmod -R 100 /var/www/$DOMAIN # execute-only
 
 # Create domain log folder.
 echo -e "\n 🟩  Creating log folder for domain...
 mkdir -p /var/www/$DOMAIN/logs
 chown -R www-data:www-data /var/www/$DOMAIN/logs
-chmod -R 100 /var/www/$DOMAIN/logs"
+chmod -R 100 /var/www/$DOMAIN/logs" # execute-only
 
 # Setup the Apache error logs now so we can set permissions.
 echo -e "\n 🟩  Setting up Apache error logs..."
 touch /var/www/$DOMAIN/logs/error.log
 chown root:root /var/www/$DOMAIN/logs/error.log
-chmod 200 /var/www/$DOMAIN/logs/error.log
+chmod 200 /var/www/$DOMAIN/logs/error.log # write-only
 
 # Setup the Apache access logs now so we can set permissions.
 echo -e "\n 🟩  Setting up Apache access logs..."
 touch /var/www/$DOMAIN/logs/access.log
 chown root:root /var/www/$DOMAIN/logs/access.log
-chmod 200 /var/www/$DOMAIN/logs/access.log
+chmod 200 /var/www/$DOMAIN/logs/access.log # write-only
 
 # Start and enable Apache
 echo -e "\n 🟩  Adding Apache to boot..."
