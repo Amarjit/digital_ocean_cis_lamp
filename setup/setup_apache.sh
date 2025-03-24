@@ -130,11 +130,6 @@ a2ensite 001-$DOMAIN.conf
 echo -e "\n 🟩  Creating web folder for domain..."
 mkdir -p /var/www/$DOMAIN/public
 
-# Set permissions for domain folder.
-echo -e "\n 🟩  Setting permissions for domain folder..."
-chown -R www-data:www-data /var/www/$DOMAIN
-chmod -R 755 /var/www/$DOMAIN
-
 # Move default index.html to domain folder.
 echo -e "\n 🟩  Moving default index.html to domain folder..."
 mv /var/www/html/index.html /var/www/$DOMAIN/public/index.html
@@ -146,13 +141,18 @@ rm -rf /var/www/html"
 # Adjust permissions
 echo -e "\n 🟩  Setting permissions for web folder..."
 chown -R www-data:www-data /var/www
-chmod -R 755 /var/www
+chmod -R 100 /var/www
+
+# Set permissions for domain folder.
+echo -e "\n 🟩  Setting permissions for domain folder..."
+chown -R www-data:www-data /var/www/$DOMAIN
+chmod -R 100 /var/www/$DOMAIN
 
 # Create domain log folder.
 echo -e "\n 🟩  Creating log folder for domain...
 mkdir -p /var/www/$DOMAIN/logs
 chown -R www-data:www-data /var/www/$DOMAIN/logs
-chmod -R 700 /var/www/$DOMAIN/logs"
+chmod -R 100 /var/www/$DOMAIN/logs"
 
 # Start and enable Apache
 echo -e "\n 🟩  Adding Apache to boot..."
