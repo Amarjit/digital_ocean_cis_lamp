@@ -154,6 +154,18 @@ mkdir -p /var/www/$DOMAIN/logs
 chown -R www-data:www-data /var/www/$DOMAIN/logs
 chmod -R 100 /var/www/$DOMAIN/logs"
 
+# Setup the Apache error logs now so we can set permissions.
+echo -e "\n 🟩  Setting up Apache error logs..."
+touch /var/www/$DOMAIN/logs/error.log
+chown root:root /var/www/$DOMAIN/logs/error.log
+chmod 200 /var/www/$DOMAIN/logs/error.log
+
+# Setup the Apache access logs now so we can set permissions.
+echo -e "\n 🟩  Setting up Apache access logs..."
+touch /var/www/$DOMAIN/logs/access.log
+chown root:root /var/www/$DOMAIN/logs/access.log
+chmod 200 /var/www/$DOMAIN/logs/access.log
+
 # Start and enable Apache
 echo -e "\n 🟩  Adding Apache to boot..."
 systemctl enable apache2
