@@ -4,33 +4,30 @@ This repository provides a quick setup for a LAMP stack with optimized settings 
 
 ## Prerequisites
 
-- A server running Debian 12 (or similar Linux distribution)
-- Access to the server via SSH
-- A registered domain for use with Certbot (for SSL)
+- Server running Debian 12 (or similar Linux distribution)
+- Access to server via SSH
+- Registered domain pointing to server IP for use with Certbot (for SSL)
 - git required to pulldown repository
 
 ## Configuration
 
-Before running the setup, ensure that the configuration variables at the top of `setup.sh` are correct and match your requirements.
-Make sure to check other configuration variables in the `setup.sh` file as well. The script has been tuned for low-footprint websites.
+Before running the setup, ensure that .env file match your requirements. Make sure to check other configuration variables in the `setup.sh` file as well. The script has been tuned for low-footprint websites.
 
 ## Quickstart
 
-Check and install git:
+Install git:
 
     command -v git >/dev/null 2>&1 || { sudo apt update && sudo apt install -y git; }
 
 Paste the single line command. It will prompt to enter domain and email address:
 
-    echo "Enter your domain (e.g., example.com): " && \
+    echo ">>> Enter your domain: " && \
     read DOMAIN && \
-    echo "Enter your email address: " && \
+    echo ">>> Email address: " && \
     read EMAIL && \
     sudo apt install git -y && \
     cd ~ && \
     git clone https://github.com/Amarjit/digital_ocean_cis_lamp.git && \
     cd digital_ocean_cis_lamp && \
-    sed -i "s/EXAMPLE.COM/$DOMAIN/g" .env && \
-    sed -i "s/example@example.com/$EMAIL/g" .env && \
     chmod +x setup.sh && \
-    ./setup.sh
+    ./setup.sh $DOMAIN $EMAIL
