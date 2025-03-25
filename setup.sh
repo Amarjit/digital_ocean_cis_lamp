@@ -4,7 +4,7 @@ DOMAIN=$1
 EMAIL=$2
 
 # Update system. Non-interactive and upgrade all packages regardless of custom versions.
-echo -e "\n 🟩  Updating system
+echo -e "\n 🟩  Updating system"
 DEBIAN_FRONTEND=noninteractive apt update > /dev/null 2>&1 && sudo DEBIAN_FRONTEND=noninteractive apt full-upgrade -y > /dev/null 2>&1
 
 # Set execute permissions.
