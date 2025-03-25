@@ -1,5 +1,7 @@
-# SSH Params
+# Params
 DOMAIN=$1
+VHOST_FILE="002-$DOMAIN.conf"
+VHOST_EXAMPLE_FILE="002-EXAMPLE.COM.conf"
 
 # Ensure DOMAIN is set
 if [[ -z "$DOMAIN" ]]; then
@@ -8,16 +10,15 @@ if [[ -z "$DOMAIN" ]]; then
 fi
 
 # Ensure vhost does not already exist
-if [[ -f "/etc/apache2/sites-available/$DOMAIN.conf" ]]; then
+if [[ -f "/etc/apache2/sites-available/$VHOST_FILE" ]]; then
     echo "🟥 Vhost already exists for $DOMAIN. Aborting."
     exit 1
 fi
 
 # Create vhost
 echo -e "\n 🟩  Creating domain vhost"
-VHOST_FILE="$DOMAIN.conf"
 VHOST_FILE_PATH="/etc/apache2/sites-available/$VHOST_FILE"
-VHOST_EXAMPLE_FILE_PATH="/etc/apache2/sites-available/EXAMPLE.COM.conf"
+VHOST_EXAMPLE_FILE_PATH="/etc/apache2/sites-available/$VHOST_EXAMPLE_FILE"
 sed "s/EXAMPLE.COM/$DOMAIN/g" $VHOST_EXAMPLE_FILE_PATH > "$VHOST_FILE_PATH"
 
 # Create common folders
