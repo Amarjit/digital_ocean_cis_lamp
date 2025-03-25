@@ -32,9 +32,9 @@ FLAGS_PATH="$DEPLOY_PATH/flags"
 echo -e "\n 🟩  Creating domain folders: public, logs, deploy, flags"
 mkdir -p $DOMAIN_PATH $PUBLIC_PATH $LOGS_PATH $DEPLOY_PATH $FLAGS_PATH
 
-# Create a default index.html file
-echo -e "\n 🟩  Creating default index.html file"
-touch $PUBLIC_PATH/index.html
+# Create a default index files.
+echo -e "\n 🟩  Creating default files"
+cp -R setup/artifacts/* $PUBLIC_PATH/
 
 # Setup the Apache error logs now so we can set permissions.
 echo -e "\n 🟩  Setting up Apache access & error logs"
@@ -61,8 +61,8 @@ chown www-data:www-data $PUBLIC_PATH
 chmod 100 $PUBLIC_PATH # execute-only
 chmod 400 $PUBLIC_PATH/index.html # read-only
 
-# Index file.
-chown www-data:www-data $PUBLIC_PATH/index.html
+# Public files.
+chown www-data:www-data $PUBLIC_PATH/*.*
 chmod 400 $PUBLIC_PATH/index.html # read-only
 
 # Logs.
