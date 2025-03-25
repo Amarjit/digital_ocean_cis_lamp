@@ -17,7 +17,7 @@ fi
 echo -e "\n 🟩  Creating domain vhost"
 VHOST_FILE="$DOMAIN.conf"
 VHOST_FILE_PATH="/etc/apache2/sites-available/$VHOST_FILE"
-VHOST_EXAMPLE_FILE_PATH="/etc/apache2/sites-available/001-EXAMPLE.COM.conf"
+VHOST_EXAMPLE_FILE_PATH="/etc/apache2/sites-available/EXAMPLE.COM.conf"
 sed "s/EXAMPLE.COM/$DOMAIN/g" $VHOST_EXAMPLE_FILE_PATH > "$VHOST_FILE_PATH"
 
 # Create common folders
