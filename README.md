@@ -15,19 +15,6 @@ Before running the setup, ensure that .env file match your requirements. Make su
 
 ## Quickstart
 
-Install git:
-
-    command -v git >/dev/null 2>&1 || { sudo apt update && sudo apt install -y git; }
-
 Paste the single line command. It will prompt to enter domain and email address:
 
-    echo ">>> Enter your domain: " && \
-    read DOMAIN && \
-    echo ">>> Email address: " && \
-    read EMAIL && \
-    sudo apt install git -y && \
-    cd ~ && \
-    git clone https://github.com/Amarjit/digital_ocean_cis_lamp.git && \
-    cd digital_ocean_cis_lamp && \
-    chmod +x setup.sh && \
-    ./setup.sh $DOMAIN $EMAIL
+echo ">>> Enter your domain: " && read DOMAIN && echo ">>> Enter your email address: " && read EMAIL && sudo apt install git -y > /dev/null 2>&1 && cd ~ && git clone https://github.com/Amarjit/digital_ocean_cis_lamp.git && cd digital_ocean_cis_lamp && chmod +x setup.sh && ./setup.sh "$DOMAIN" "$EMAIL"
