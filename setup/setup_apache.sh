@@ -107,8 +107,7 @@ tee /etc/apache2/sites-available/$EXAMPLE_DOMAIN.conf > /dev/null <<EOL
     # Public folder should contain servable files. e.g. index.php. Domain folder can be used for configuration files, logs, deployment, etc.
     DocumentRoot /var/www/$EXAMPLE_DOMAIN/public
 
-    # Access logs
-    # Custom access log.
+    # Access log.
     CustomLog /var/www/$EXAMPLE_DOMAIN/logs/access.log combined
 
     # Error log.

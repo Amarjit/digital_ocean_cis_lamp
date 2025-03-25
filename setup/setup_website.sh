@@ -56,6 +56,10 @@ chown www-data:www-data $PUBLIC_PATH
 chmod 100 $PUBLIC_PATH # execute-only
 chmod 400 $PUBLIC_PATH/index.html # read-only
 
+# Index file.
+chown www-data:www-data $PUBLIC_PATH/index.html
+chmod 400 $PUBLIC_PATH/index.html # read-only
+
 # Logs.
 chown www-data:www-data $LOGS_PATH
 chmod 100 $LOGS_PATH # execute-only. Apache only needs to write to files in this folder.
