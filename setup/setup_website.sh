@@ -63,7 +63,7 @@ chmod 400 $PUBLIC_PATH/index.html # read-only
 
 # Public files.
 chown www-data:www-data $PUBLIC_PATH/*.*
-chmod 400 $PUBLIC_PATH/index.html # read-only
+chmod -R 400 $PUBLIC_PATH/* # read-only
 
 # Logs.
 chown www-data:www-data $LOGS_PATH

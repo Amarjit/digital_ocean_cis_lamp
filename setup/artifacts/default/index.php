@@ -22,7 +22,6 @@
             margin-top: 50px;
             font-size: 24px;
             color: #333;
-            text-transform: uppercase;
             white-space: nowrap;
             text-overflow: ellipsis;
             transform: rotate(-5deg);
@@ -36,7 +35,7 @@
     </style>
 </head>
 <body>
-    <h1><?php print "This is the default page. <br>I suggest you leave whilst you can." ?></h1>
+    <h1><?php print "default php page" ?></h1>
     <img src="default.png">
 </body>
 </html>
