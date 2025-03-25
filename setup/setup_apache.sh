@@ -5,7 +5,7 @@ source ../.env
 
 # Install Apache
 echo -e "\n 🟩  Installing Apache"
-apt install apache2 -y
+apt install apache2 -y > /dev/null 2>&1
 
 # Apache enable required modules.
 echo -e "\n 🟩  Enabling required Apache modules"

@@ -5,7 +5,7 @@ source ../.env
 
 # Install PHP
 echo -e "\n 🟩  Installing PHP"
-apt install php libapache2-mod-php -y
+apt install php libapache2-mod-php -y > /dev/null 2>&1
 
 # Get the active PHP version
 PHP_VERSION=$(php -r "echo PHP_VERSION;" | cut -d'.' -f1,2)
