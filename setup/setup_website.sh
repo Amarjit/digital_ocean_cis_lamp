@@ -28,9 +28,10 @@ PUBLIC_PATH="$DOMAIN_PATH/public"
 LOGS_PATH="$DOMAIN_PATH/logs"
 DEPLOY_PATH="$DOMAIN_PATH/deploy"
 FLAGS_PATH="$DEPLOY_PATH/flags"
+ARTIFACTS_PATH="$DEPLOY_PATH/artifacts"
 
-echo -e "\n 🟩  Creating domain folders: public, logs, deploy, flags"
-mkdir -p $DOMAIN_PATH $PUBLIC_PATH $LOGS_PATH $DEPLOY_PATH $FLAGS_PATH
+echo -e "\n 🟩  Creating domain folders: public, logs, deploy, flags, artifacts"
+mkdir -p $DOMAIN_PATH $PUBLIC_PATH $LOGS_PATH $DEPLOY_PATH $FLAGS_PATH $ARTIFACTS_PATH
 
 # Create a default index files.
 echo -e "\n 🟩  Creating default files"
@@ -74,6 +75,10 @@ chmod -R 200 $LOGS_PATH/*.log # write-only
 # Deploy. Apache does not require access.
 chown -R root:root $DEPLOY_PATH
 chmod -R 100 $DEPLOY_PATH # execute-only
+
+# Deploy Artifacts. Artifacts used for deploying resources.
+chown -R root:root $ARTIFACTS_PATH
+chmod -R 700 $ARTIFACTS_PATH # Root only
 
 # Flags. Apache only requires access to write flag files to this folder.
 chown -R www-data:www-data $FLAGS_PATH
