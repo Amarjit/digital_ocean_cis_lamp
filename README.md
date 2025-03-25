@@ -22,19 +22,23 @@ Be careful with generating SSL certificates for the same domain too many times. 
 ## Websites
 
 Create as many websites as required:
+
     ./setup/setup_website.sh <domain>
 
 To delete a website:
+
     rm -R /var/www/<domain>
     rm /etc/apache2/sites-enabled/002-<domain>.conf
     rm /etc/apache2/sites-available/002-<domain>.conf
 
 If you have SSL (CertBot) configured, you should also:
+
     rm /etc/apache2/sites-enabled/002-<domain>-le-ssl.conf 
     rm /etc/apache2/sites-available/002-<domain>-le-ssl.conf
     rm -R /etc/letsencrypt/live/<domain>/
 
 Ensure to reload apache for changes to take effect:
+
     systemctl reload apache2
 
 ## Quickstart
