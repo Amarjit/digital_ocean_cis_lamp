@@ -1,7 +1,7 @@
 #!/bin/bash
 
  # Get env.
-source ../.env
+source .env
 
 # Install PHP
 echo -e "\n 🟩  Installing PHP"

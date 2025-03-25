@@ -1,7 +1,7 @@
 #!/bin/bash
 
  # Get env.
-source ../.env
+source .env
 
 # Install Apache
 echo -e "\n 🟩  Installing Apache"
