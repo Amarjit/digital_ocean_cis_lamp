@@ -92,3 +92,5 @@ a2ensite "$VHOST_FILE"
 # Reload Apache
 echo -e "\n 🟩  Reloading Apache"
 systemctl reload apache2
+
+echo -e "\n ✅  Domain setup complete"
