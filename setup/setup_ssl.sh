@@ -1,7 +1,7 @@
 #!/bin/bash
 
-$DOMAIN=$1
-$EMAIL=$2
+DOMAIN=$1
+EMAIL=$2
 
 # Ensure DOMAIN is set
 if [[ -z "$DOMAIN" ]]; then
