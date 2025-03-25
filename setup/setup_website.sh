@@ -34,7 +34,7 @@ mkdir -p $DOMAIN_PATH $PUBLIC_PATH $LOGS_PATH $DEPLOY_PATH $FLAGS_PATH
 
 # Create a default index files.
 echo -e "\n 🟩  Creating default files"
-cp -R setup/artifacts/* $PUBLIC_PATH/
+cp -R setup/artifacts/default/* $PUBLIC_PATH/
 
 # Setup the Apache error logs now so we can set permissions.
 echo -e "\n 🟩  Setting up Apache access & error logs"
