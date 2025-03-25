@@ -47,6 +47,10 @@ echo -e "\n 🟩  Setting permissions"
 chown -R root:root $WWW_PATH
 chmod -R 000 $WWW_PATH # no permissions
 
+# WWW
+chown -R www-data:www-data $WWW_PATH
+chmod -R 100 $WWW_PATH # execute-only
+
 # Domain.
 chown www-data:www-data $DOMAIN_PATH
 chmod 100 $DOMAIN_PATH # execute-only
