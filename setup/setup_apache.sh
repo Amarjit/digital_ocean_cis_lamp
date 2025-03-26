@@ -136,8 +136,8 @@ rm -rf /var/www/html
 
 # Adjust permissions
 echo -e "\n 🟩  Setting permissions"
-chown -R www-data:www-data /var/www
-chmod -R 100 /var/www # execute-only
+chown -R root:www-data /var/www
+chmod -R 110 /var/www # execute-only
 
 # Enable Apache
 echo -e "\n 🟩  Adding Apache to boot"

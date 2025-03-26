@@ -51,43 +51,43 @@ chown -R root:root $WWW_PATH
 chmod -R 000 $WWW_PATH # no permissions
 
 # WWW
-chown -R www-data:www-data $WWW_PATH
-chmod -R 100 $WWW_PATH # execute-only
+chown -R root:www-data $WWW_PATH
+chmod -R 110 $WWW_PATH # execute-only
 
 # Domain.
-chown www-data:www-data $DOMAIN_PATH
-chmod 100 $DOMAIN_PATH # execute-only
+chown root:www-data $DOMAIN_PATH
+chmod 110 $DOMAIN_PATH # execute-only
 
 # Public.
-chown www-data:www-data $PUBLIC_PATH
-chmod 100 $PUBLIC_PATH # execute-only
-chmod 400 $PUBLIC_PATH/index.html # read-only
+chown root:www-data $PUBLIC_PATH
+chmod 110 $PUBLIC_PATH # execute-only
+chmod 440 $PUBLIC_PATH/index.html # read-only
 
 # Public files.
-chown www-data:www-data $PUBLIC_PATH/*.*
-chmod -R 400 $PUBLIC_PATH/* # read-only
+chown root:www-data $PUBLIC_PATH/*.*
+chmod -R 440 $PUBLIC_PATH/* # read-only
 
 # Logs.
-chown www-data:www-data $LOGS_PATH
-chmod 100 $LOGS_PATH # execute-only. Apache only needs to write to files in this folder.
+chown root:www-data $LOGS_PATH
+chmod 110 $LOGS_PATH # execute-only. Apache only needs to write to files in this folder.
 chown -R root:root $LOGS_PATH/*.log # Owned by root
-chmod -R 200 $LOGS_PATH/*.log # write-only
+chmod -R 220 $LOGS_PATH/*.log # write-only
 
 # Deploy. Apache does not require access.
 chown -R root:root $DEPLOY_PATH
-chmod -R 100 $DEPLOY_PATH # execute-only
+chmod -R 110 $DEPLOY_PATH # execute-only
 
 # Deploy Artifacts. Artifacts used for deploying resources.
 chown -R root:root $ARTIFACTS_PATH
-chmod -R 100 $ARTIFACTS_PATH # execute-only
+chmod -R 110 $ARTIFACTS_PATH # execute-only
 
 # Flags. Flags required by shell scripts.
 chown -R root:root $FLAGS_PATH
-chmod -R 100 $FLAGS_PATH # execute-only
+chmod -R 110 $FLAGS_PATH # execute-only
 
 # Flags Web-only. Apache only requires access to write flags initiated by web requests.
-chown -R www-data:www-data $FLAGS_WEBONLY_PATH
-chmod -R 100 $FLAGS_WEBONLY_PATH # execute-only
+chown -R root:www-data $FLAGS_WEBONLY_PATH
+chmod -R 110 $FLAGS_WEBONLY_PATH # execute-only
 
 # Update PHP open_basedir to allow PHP access to folders.
 echo -e "\n 🟩  Overriding PHP access (open_basedir) via vhost: public, logs, flags"

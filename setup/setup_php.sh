@@ -43,8 +43,8 @@ EOF
 echo -e "\n 🟩  Creating custom PHP ini file for PHP Apache"
 cp $PHP_CUSTOM_INI_CLI $PHP_CUSTOM_INI_APACHE2
 
-chmod 700 /var/lib/php/sessions
-chown www-data:www-data /var/lib/php/sessions
+chmod 770 /var/lib/php/sessions # read, write, execute
+chown root:www-data /var/lib/php/sessions
 
 # Reload if Apache available
 if command -v apache2 >/dev/null 2>&1; then
