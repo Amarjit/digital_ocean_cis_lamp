@@ -95,7 +95,7 @@ echo -e "\n 🟩  Overriding PHP access (open_basedir) via vhost: public, logs, 
 PHP_VERSION=$(php -r "echo PHP_VERSION;" | cut -d'.' -f1,2)
 PHP_CUSTOM_INI_CLI="/etc/php/$PHP_VERSION/cli/conf.d/99-custom.ini"
 PHP_OPEN_BASE_DIR_VALUE=$(grep -E '^[[:space:]]*open_basedir' "$PHP_CUSTOM_INI_CLI" | cut -d'=' -f2 | tr -d '[:space:]' | tr -d '"')
-NEW_OPEN_BASE_DIR="$PHP_OPEN_BASE_DIR_VALUE:$PUBLIC_PATH:$LOGS_PATH:$FLAGS_PATH_WEBONLY_PATH"
+NEW_OPEN_BASE_DIR="$PHP_OPEN_BASE_DIR_VALUE:$PUBLIC_PATH:$LOGS_PATH:$FLAGS_WEBONLY_PATH"
 
 # Append new base dir override to Vhost file under the DocumentRoot directive.
 sed -i "s|DocumentRoot.*|DocumentRoot $PUBLIC_PATH\n\n    php_admin_value open_basedir \"$NEW_OPEN_BASE_DIR\"|g" "$VHOST_FILE_PATH"
