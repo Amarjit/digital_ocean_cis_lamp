@@ -9,6 +9,12 @@ if [[ -z "$DOMAIN" ]]; then
     exit 1
 fi
 
+# Ensure EMAIL is set
+if [[ -z "$EMAIL" ]]; then
+    echo "🟥 EMAIL is not set. Aborting."
+    exit 1
+fi
+
 # SSL Setup with Certbot. CertBot will take care of creating new 443 vhost and enabling SSL. Will also add redirect to existing vhost from 80 to 443.
 echo -e "\n 🟩  Installing Certbot for SSL"
 apt install certbot python3-certbot-apache -y > /dev/null 2>&1
