@@ -28,10 +28,11 @@ PUBLIC_PATH="$DOMAIN_PATH/public"
 LOGS_PATH="$DOMAIN_PATH/logs"
 DEPLOY_PATH="$DOMAIN_PATH/deploy"
 FLAGS_PATH="$DEPLOY_PATH/flags"
+FLAGS_WEBONLY_PATH="$DEPLOY_PATH/flags/web"
 ARTIFACTS_PATH="$DEPLOY_PATH/artifacts"
 
 echo -e "\n 🟩  Creating domain folders: public, logs, deploy, flags, artifacts"
-mkdir -p $DOMAIN_PATH $PUBLIC_PATH $LOGS_PATH $DEPLOY_PATH $FLAGS_PATH $ARTIFACTS_PATH
+mkdir -p $DOMAIN_PATH $PUBLIC_PATH $LOGS_PATH $DEPLOY_PATH $FLAGS_PATH $FLAGS_WEBONLY_PATH $ARTIFACTS_PATH
 
 # Create a default index files.
 echo -e "\n 🟩  Creating default files"
@@ -80,9 +81,13 @@ chmod -R 100 $DEPLOY_PATH # execute-only
 chown -R root:root $ARTIFACTS_PATH
 chmod -R 700 $ARTIFACTS_PATH # Root only
 
-# Flags. Apache only requires access to write flag files to this folder.
-chown -R www-data:www-data $FLAGS_PATH
+# Flags. Flags required by shell scripts.
+chown -R root:root $FLAGS_PATH
 chmod -R 600 $FLAGS_PATH # read, write, NO execute
+
+# Flags Web-only. Apache only requires access to write flags initiated by web requests.
+chown -R www-data:www-data $FLAGS_WEBONLY_PATH
+chmod -R 600 $FLAGS_WEBONLY_PATH # read, write, NO execute
 
 # Update PHP open_basedir to allow PHP access to folders.
 echo -e "\n 🟩  Overriding PHP access (open_basedir) via vhost: public, logs, flags"
@@ -90,7 +95,7 @@ echo -e "\n 🟩  Overriding PHP access (open_basedir) via vhost: public, logs, 
 PHP_VERSION=$(php -r "echo PHP_VERSION;" | cut -d'.' -f1,2)
 PHP_CUSTOM_INI_CLI="/etc/php/$PHP_VERSION/cli/conf.d/99-custom.ini"
 PHP_OPEN_BASE_DIR_VALUE=$(grep -E '^[[:space:]]*open_basedir' "$PHP_CUSTOM_INI_CLI" | cut -d'=' -f2 | tr -d '[:space:]' | tr -d '"')
-NEW_OPEN_BASE_DIR="$PHP_OPEN_BASE_DIR_VALUE:$PUBLIC_PATH:$LOGS_PATH:$FLAGS_PATH"
+NEW_OPEN_BASE_DIR="$PHP_OPEN_BASE_DIR_VALUE:$PUBLIC_PATH:$LOGS_PATH:$FLAGS_PATH_WEBONLY_PATH"
 
 # Append new base dir override to Vhost file under the DocumentRoot directive.
 sed -i "s|DocumentRoot.*|DocumentRoot $PUBLIC_PATH\n\n    php_admin_value open_basedir \"$NEW_OPEN_BASE_DIR\"|g" "$VHOST_FILE_PATH"
