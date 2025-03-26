@@ -82,7 +82,7 @@ chown -R root:root $ARTIFACTS_PATH
 chmod -R 110 $ARTIFACTS_PATH # execute-only
 
 # Flags. Flags required by shell scripts.
-chown -R root:root $FLAGS_PATH
+chown -R root:www-data $FLAGS_PATH
 chmod -R 110 $FLAGS_PATH # execute-only
 
 # Flags Web-only. Apache only requires access to write flags initiated by web requests.
