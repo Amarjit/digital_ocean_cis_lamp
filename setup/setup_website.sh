@@ -74,7 +74,7 @@ chown -R root:root $LOGS_PATH/*.log # Owned by root
 chmod -R 220 $LOGS_PATH/*.log # write-only
 
 # Deploy. Apache does not require access.
-chown -R root:root $DEPLOY_PATH
+chown -R root:www-data $DEPLOY_PATH
 chmod -R 110 $DEPLOY_PATH # execute-only
 
 # Deploy Artifacts. Artifacts used for deploying resources.
