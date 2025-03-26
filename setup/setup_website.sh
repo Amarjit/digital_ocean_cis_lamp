@@ -79,15 +79,15 @@ chmod -R 100 $DEPLOY_PATH # execute-only
 
 # Deploy Artifacts. Artifacts used for deploying resources.
 chown -R root:root $ARTIFACTS_PATH
-chmod -R 700 $ARTIFACTS_PATH # Root only
+chmod -R 100 $ARTIFACTS_PATH # execute-only
 
 # Flags. Flags required by shell scripts.
 chown -R root:root $FLAGS_PATH
-chmod -R 600 $FLAGS_PATH # read, write, NO execute
+chmod -R 100 $FLAGS_PATH # execute-only
 
 # Flags Web-only. Apache only requires access to write flags initiated by web requests.
 chown -R www-data:www-data $FLAGS_WEBONLY_PATH
-chmod -R 600 $FLAGS_WEBONLY_PATH # read, write, NO execute
+chmod -R 100 $FLAGS_WEBONLY_PATH # execute-only
 
 # Update PHP open_basedir to allow PHP access to folders.
 echo -e "\n 🟩  Overriding PHP access (open_basedir) via vhost: public, logs, flags"
