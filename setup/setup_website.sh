@@ -87,7 +87,7 @@ chmod -R 110 $FLAGS_PATH # execute-only
 
 # Flags Web-only. Apache only requires access to write flags initiated by web requests.
 chown -R root:www-data $FLAGS_WEBONLY_PATH
-chmod -R 110 $FLAGS_WEBONLY_PATH # execute-only
+chmod -R 130 $FLAGS_WEBONLY_PATH # Apache can write + execute directory
 
 # Update PHP open_basedir to allow PHP access to folders.
 echo -e "\n 🟩  Overriding PHP access (open_basedir) via vhost: public, logs, flags"
