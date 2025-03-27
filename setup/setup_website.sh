@@ -30,9 +30,10 @@ DEPLOY_PATH="$DOMAIN_PATH/deploy"
 FLAGS_PATH="$DEPLOY_PATH/flags"
 FLAGS_WEBONLY_PATH="$DEPLOY_PATH/flags/web"
 ARTIFACTS_PATH="$DEPLOY_PATH/artifacts"
+ARTIFACTS_WEB_PATH="$PUBLIC_PATH/artifacts/web"
 
 echo -e "\n 🟩  Creating domain folders: public, logs, deploy, flags, artifacts"
-mkdir -p $DOMAIN_PATH $PUBLIC_PATH $LOGS_PATH $DEPLOY_PATH $FLAGS_PATH $FLAGS_WEBONLY_PATH $ARTIFACTS_PATH
+mkdir -p $DOMAIN_PATH $PUBLIC_PATH $LOGS_PATH $DEPLOY_PATH $FLAGS_PATH $FLAGS_WEBONLY_PATH $ARTIFACTS_PATH $ARTIFACTS_WEB_PATH
 
 # Create a default index files.
 echo -e "\n 🟩  Creating default files"
@@ -80,6 +81,10 @@ chmod -R 110 $DEPLOY_PATH # execute-only
 # Deploy Artifacts. Artifacts used for deploying resources.
 chown -R root:root $ARTIFACTS_PATH
 chmod -R 110 $ARTIFACTS_PATH # execute-only
+
+# Deploy Artifacts web. Artifacts used for deploying web-only resources.
+chown -R root:root $ARTIFACTS_WEB_PATH
+chmod -R 110 $ARTIFACTS_WEB_PATH # execute-only
 
 # Flags. Flags required by shell scripts.
 chown -R root:www-data $FLAGS_PATH
