@@ -30,7 +30,7 @@ DEPLOY_PATH="$DOMAIN_PATH/deploy"
 FLAGS_PATH="$DEPLOY_PATH/flags"
 FLAGS_WEBONLY_PATH="$DEPLOY_PATH/flags/web"
 ARTIFACTS_PATH="$DEPLOY_PATH/artifacts"
-ARTIFACTS_WEB_PATH="$PUBLIC_PATH/artifacts/web"
+ARTIFACTS_WEB_PATH="$DEPLOY_PATH/artifacts/web"
 
 echo -e "\n 🟩  Creating domain folders: public, logs, deploy, flags, artifacts"
 mkdir -p $DOMAIN_PATH $PUBLIC_PATH $LOGS_PATH $DEPLOY_PATH $FLAGS_PATH $FLAGS_WEBONLY_PATH $ARTIFACTS_PATH $ARTIFACTS_WEB_PATH
