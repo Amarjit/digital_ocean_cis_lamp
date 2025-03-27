@@ -19,7 +19,7 @@ fi
 echo -e "\n 🟩  Creating domain vhost"
 VHOST_FILE_PATH="/etc/apache2/sites-available/$VHOST_FILE"
 VHOST_EXAMPLE_FILE_PATH="/etc/apache2/sites-available/$VHOST_EXAMPLE_FILE"
-sed "s/EXAMPLE.COM/$DOMAIN/g" $VHOST_EXAMPLE_FILE_PATH > "$VHOST_FILE_PATH"
+sed "s/EXAMPLE.COM/$DOMAIN/g" $DOMAIN > "$VHOST_FILE_PATH"
 
 # Create common folders
 WWW_PATH="/var/www"
