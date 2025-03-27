@@ -97,7 +97,7 @@ tee /etc/apache2/sites-available/999-block.conf > /dev/null <<EOL
 EOL
 
 # Create example vhost config for HTTP site.
-EXAMPLE_DOMAIN="002-EXAMPLE.COM"
+EXAMPLE_DOMAIN="EXAMPLE.COM"
 echo -e "\n 🟩  Creating HTTP (80) example vhost for domain"
 tee /etc/apache2/sites-available/$EXAMPLE_DOMAIN.conf > /dev/null <<EOL
 <VirtualHost *:80>
