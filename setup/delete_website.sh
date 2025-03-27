@@ -15,6 +15,11 @@ WWW="/var/www/$DOMAIN"
 SSL="/etc/letsencrypt/live/$DOMAIN"
 
 # Check what exists before deleting
+if [[ ! -d "$WWW" && ! -d "$SSL" && ! -f "$VHOST_1" && ! -f "$VHOST_2" && ! -f "$VHOST_3" && ! -f "$VHOST_4" ]]; then
+    echo "🟨 Nothing to delete. No files or directories exist for $DOMAIN"
+    exit 0
+fi
+
 if [[ -d "$WWW" ]]; then
     echo "🟩 Directory $WWW exists and will be deleted."
 else
