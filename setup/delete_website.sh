@@ -13,9 +13,10 @@ VHOST_3="/etc/apache2/sites-available/002-$DOMAIN.conf"
 VHOST_4="/etc/apache2/sites-available/002-$DOMAIN-le-ssl.conf"
 WWW="/var/www/$DOMAIN"
 SSL="/etc/letsencrypt/live/$DOMAIN"
+CRON_FILE="/etc/cron.d/${DOMAIN}__blue-green-deploy"
 
 # Check what exists before deleting
-if [[ ! -d "$WWW" && ! -d "$SSL" && ! -f "$VHOST_1" && ! -f "$VHOST_2" && ! -f "$VHOST_3" && ! -f "$VHOST_4" ]]; then
+if [[ ! -d "$WWW" && ! -d "$SSL" && ! -f "$VHOST_1" && ! -f "$VHOST_2" && ! -f "$VHOST_3" && ! -f "$VHOST_4" && ! -f "$CRON_FILE" ]]; then
     echo "🟨 Nothing to delete. No files or directories exist for $DOMAIN"
     exit 0
 fi
@@ -50,6 +51,11 @@ if [[ -f "$VHOST_4" ]]; then
 else
     echo "🟥 File $VHOST_4 does not exist."
 fi
+if [[ -f "$CRON_FILE" ]]; then
+    echo "🟩 File $CRON_FILE exists and will be deleted."
+else
+    echo "🟥 File $CRON_FILE does not exist."
+fi
 
 rm -rf $WWW
 rm -rf $SSL
@@ -57,6 +63,7 @@ rm -f $VHOST_1
 rm -f $VHOST_2
 rm -f $VHOST_3
 rm -f $VHOST_4
+rm -f $CRON_FILE
 
 # Check files and folders have been erased
 if [[ -d "$WWW" ]]; then
@@ -77,9 +84,12 @@ fi
 if [[ -f "$VHOST_4" ]]; then
     echo -e "\n 🟥  File $VHOST_4 has not been deleted."
 fi
+if [[ -f "$CRON_FILE" ]]; then
+    echo -e "\n 🟥  File $CRON_FILE has not been deleted."
+fi
 
 # Exit if any files or directories still exist
-if [[ -d "$WWW" ]] || [[ -d "$SSL" ]] || [[ -f "$VHOST_1" ]] || [[ -f "$VHOST_2" ]] || [[ -f "$VHOST_3" ]] || [[ -f "$VHOST_4" ]]; then
+if [[ -d "$WWW" ]] || [[ -d "$SSL" ]] || [[ -f "$VHOST_1" ]] || [[ -f "$VHOST_2" ]] || [[ -f "$VHOST_3" ]] || [[ -f "$VHOST_4" ]] || [[ -f "$CRON_FILE" ]]; then
     echo "🟥 Some files or directories have not been fully erased. Retry."
     exit 1
 fi
