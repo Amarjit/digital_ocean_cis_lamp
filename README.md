@@ -19,6 +19,10 @@ If you do not enter a domain name and email address, the website creation and Ce
 
 Be careful with generating SSL certificates for the same domain too many times. LetsEncrypt has rate limiting enabled. Auto-renewal of SSL certificates is enabled.
 
+Deployment works based on CRON. You can check if you're CRON is running correctly by:
+
+     tail /var/log/cron.log
+
 ## Websites
 
 Create as many websites as required:
