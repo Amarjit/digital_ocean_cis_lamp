@@ -98,8 +98,9 @@ EOL
 
 # Create example vhost config for HTTP site.
 EXAMPLE_DOMAIN="EXAMPLE.COM"
+EXAMPLE_DOMAIN_FILENAME="002-EXAMPLE.COM.conf" # We want all vhosts to be above 999-block.conf
 echo -e "\n 🟩  Creating HTTP (80) example vhost for domain"
-tee /etc/apache2/sites-available/$EXAMPLE_DOMAIN.conf > /dev/null <<EOL
+tee /etc/apache2/sites-available/$EXAMPLE_DOMAIN_FILENAME > /dev/null <<EOL
 <VirtualHost *:80>
     ServerName $EXAMPLE_DOMAIN
     ServerAlias www.$EXAMPLE_DOMAIN
