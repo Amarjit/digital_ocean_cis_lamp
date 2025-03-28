@@ -14,7 +14,7 @@ SSL can be setup. There is no cost for this service.
 
 - Server running Debian 12 (or similar Linux distribution)
 - Access to server via SSH
-- Registered domain pointing to server IP for use with Certbot (for SSL)
+- Registered domain pointing (including www) to server IP for use with Certbot (for SSL)
 - git required to pulldown repository
 
 ## Configuration
