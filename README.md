@@ -1,6 +1,12 @@
 # Digital Ocean CIS LAMP Setup
 
-This repository provides a quick setup for a LAMP stack with optimized settings for low-footprint websites. The configuration is designed to be simple and easy to set up on a DigitalOcean droplet or similar server environments.
+This repository provides a quick setup for a LAMP stack with optimized settings for low-footprint websites and hardening. The configuration is designed to be simple and easy to set up on a DigitalOcean droplet or similar server environments.
+
+You can moidfy the typical PHP ini  and Apache variables in the .env file before running the setup. Further variables be found in the Apache and PHP setup scripts within the 'setup' folder.
+
+If you have already setup the site, simply modify the 99-* INI for PHP and zzz-* CONF files for Apache.
+
+The barebones are put in place for you to start copying your files over to /var/www/<DOMAIN>/public/
 
 SSL can be setup. There is no cost for this service.
 
@@ -19,10 +25,6 @@ If you do not enter a domain name and email address, the website creation and Ce
 
 Be careful with generating SSL certificates for the same domain too many times. LetsEncrypt has rate limiting enabled. Auto-renewal of SSL certificates is enabled.
 
-Deployment works based on CRON. You can check if you're CRON is running correctly by:
-
-     tail /var/log/cron.log
-
 ## Websites
 
 Create as many websites as required:
@@ -31,19 +33,7 @@ Create as many websites as required:
 
 To delete a website:
 
-    rm -R /var/www/<domain>
-    rm /etc/apache2/sites-enabled/002-<domain>.conf
-    rm /etc/apache2/sites-available/002-<domain>.conf
-
-If you have SSL (CertBot) configured, you should also:
-
-    rm /etc/apache2/sites-enabled/002-<domain>-le-ssl.conf 
-    rm /etc/apache2/sites-available/002-<domain>-le-ssl.conf
-    rm -R /etc/letsencrypt/live/<domain>/
-
-Ensure to reload apache for changes to take effect:
-
-    systemctl reload apache2
+    ./setup/delete_website.sh <domain>
 
 ## Quickstart
 
