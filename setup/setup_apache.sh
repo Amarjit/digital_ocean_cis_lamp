@@ -119,6 +119,18 @@ tee /etc/apache2/sites-available/$EXAMPLE_DOMAIN_FILENAME > /dev/null <<EOL
         AllowOverride AuthConfig Limit FileInfo
         Options -Indexes
         Options +FollowSymLinks
+
+        # Enable mod_rewrite
+        RewriteEngine On
+
+        # Remove .php extension from URLs
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteCond %{REQUEST_FILENAME}\.php -f
+        RewriteRule ^(.*)$ $1.php [L]
+
+        # Redirect requests with .php to clean URLs
+        RewriteCond %{THE_REQUEST} "^[^ ]* .*?\.php[? ].*$"
+        RewriteRule ^(.*)\.php$ /$1 [L,R=301]        
     </Directory>        
 </VirtualHost>
 EOL
