@@ -13,6 +13,7 @@ VHOST_3="/etc/apache2/sites-available/002-$DOMAIN.conf"
 VHOST_4="/etc/apache2/sites-available/002-$DOMAIN-le-ssl.conf"
 WWW="/var/www/$DOMAIN"
 SSL="/etc/letsencrypt/live/$DOMAIN"
+SSL_SELFCERT="/etc/ssl/$DOMAIN"
 CRON_FILE="/etc/cron.d/${DOMAIN}__blue-green-deploy"
 
 # Check what exists before deleting
@@ -30,6 +31,11 @@ if [[ -d "$SSL" ]]; then
     echo "🟩 Directory $SSL exists and will be deleted."
 else
     echo "🟥 Directory $SSL does not exist."
+fi
+if [[ -d "$SSL_SELFCERT" ]]; then
+    echo "🟩 Directory $SSL_SELFCERT exists and will be deleted."
+else
+    echo "🟥 Directory $SSL_SELFCERT does not exist."
 fi
 if [[ -f "$VHOST_1" ]]; then
     echo "🟩 File $VHOST_1 exists and will be deleted."
@@ -59,6 +65,7 @@ fi
 
 rm -rf $WWW
 rm -rf $SSL
+rm -rf $SSL_SELFCERT
 rm -f $VHOST_1
 rm -f $VHOST_2
 rm -f $VHOST_3
@@ -71,6 +78,9 @@ if [[ -d "$WWW" ]]; then
 fi
 if [[ -d "$SSL" ]]; then
     echo -e "\n 🟥  Directory $SSL has not been deleted."
+fi
+if [[ -d "$SSL_SELFCERT" ]]; then
+    echo -e "\n 🟥  Directory $SSL_SELFCERT has not been deleted."
 fi
 if [[ -f "$VHOST_1" ]]; then
     echo -e "\n 🟥  File $VHOST_1 has not been deleted."
@@ -89,7 +99,7 @@ if [[ -f "$CRON_FILE" ]]; then
 fi
 
 # Exit if any files or directories still exist
-if [[ -d "$WWW" ]] || [[ -d "$SSL" ]] || [[ -f "$VHOST_1" ]] || [[ -f "$VHOST_2" ]] || [[ -f "$VHOST_3" ]] || [[ -f "$VHOST_4" ]] || [[ -f "$CRON_FILE" ]]; then
+if [[ -d "$WWW" ]] || [[ -d "$SSL" ]] || [[ -d "$SSL_SELFCERT" ]] || [[ -f "$VHOST_1" ]] || [[ -f "$VHOST_2" ]] || [[ -f "$VHOST_3" ]] || [[ -f "$VHOST_4" ]] || [[ -f "$CRON_FILE" ]]; then
     echo "🟥 Some files or directories have not been fully erased. Retry."
     exit 1
 fi
