@@ -123,6 +123,10 @@ tee /etc/apache2/sites-available/$EXAMPLE_DOMAIN_FILENAME > /dev/null <<EOL
         # Enable mod_rewrite
         RewriteEngine On
 
+        # Redirect /index.php or /index to the closest directory
+        RewriteCond %{THE_REQUEST} "^[A-Z]{3,9} /(.*/)?index(\.php)?(\?.*)? HTTP/"
+        RewriteRule ^(.*/)?index(\.php)?$ /%1 [R=301,L]
+
         # Remove .php extension from URLs
         RewriteCond %{REQUEST_FILENAME} !-d
         RewriteCond %{REQUEST_FILENAME}\.php -f
@@ -130,7 +134,7 @@ tee /etc/apache2/sites-available/$EXAMPLE_DOMAIN_FILENAME > /dev/null <<EOL
 
         # Redirect requests with .php to clean URLs
         RewriteCond %{THE_REQUEST} "^[^ ]* .*?\.php[? ].*$"
-        RewriteRule ^(.*)\.php$ /$1 [L,R=301]        
+        RewriteRule ^(.*)\.php$ /$1 [L,R=301]
     </Directory>        
 </VirtualHost>
 EOL
