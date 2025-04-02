@@ -20,7 +20,8 @@ ARTIFACTS_PATH="$DEPLOY_PATH/artifacts" # Artifacts folder for deployment script
 ARTIFACTS_WEB_PATH="$DEPLOY_PATH/artifacts/web" # Artifacts folder for deployment scripts that are used for copying over web-only resources
 
 # Apache
-VHOST_EXAMPLE_FILE="002-EXAMPLE.COM.conf"
+VHOST_EXAMPLE_DOMAIN="EXAMPLE.COM"
+VHOST_EXAMPLE_FILE="002-$VHOST_EXAMPLE_DOMAIN.conf"
 VHOST_DOMAIN_FILE="002-$DOMAIN.conf"
 VHOST_DOMAIN_LETSENCRYPT_FILE="002-$DOMAIN-le-ssl.conf" # DO NOT modify part "le-ssl.conf"
 VHOST_DOMAIN_SELFCERT_FILE="002-$DOMAIN-selfsigned.conf"
