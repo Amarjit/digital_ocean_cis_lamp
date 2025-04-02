@@ -50,7 +50,7 @@ sed -i '/DocumentRoot /a \\n    RewriteEngine On\n    RewriteCond %{HTTP_HOST} ^
 
 # Add redirect from HTTP to HTTPS
 echo -e "\n 🟩  Adding redirect from HTTP to HTTPS"
-sed -i "/DocumentRoot /a \\n    RewriteEngine on\\n    RewriteCond %{SERVER_NAME} =$DOMAIN [OR]\\n    RewriteCond %{SERVER_NAME} =www.$DOMAIN\\n    RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]" $NONE_SSL_VHOST_FILEPATH
+sed -i "/DocumentRoot /a \\n    RewriteEngine on\\n    RewriteCond %{SERVER_NAME} =$DOMAIN [OR]\\n    RewriteCond %{SERVER_NAME} =www.$DOMAIN\\n    RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]\\n" $NONE_SSL_VHOST_FILEPATH
 
 # Restart Apache to apply changes
 echo -e "\n 🟩  Reloading Apache to apply changes"
