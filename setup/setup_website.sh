@@ -1,5 +1,8 @@
+#!/bin/bash
+
 # Params
 DOMAIN=$1
+DOMAIN_ENV_PATH="/var/www/$DOMAIN/.env"
 
 # Ensure DOMAIN is set
 if [[ -z "$DOMAIN" ]]; then
@@ -7,39 +10,24 @@ if [[ -z "$DOMAIN" ]]; then
     exit 1
 fi
 
-# Common path structure
-WWW_PATH                ="/var/www" # All domain folders are stored here with their config.
-DOMAIN_PATH             ="$WWW_PATH/$DOMAIN" # Domain folder
-PUBLIC_PATH             ="$DOMAIN_PATH/public" # Public folder for www
-LOGS_PATH               ="$DOMAIN_PATH/logs" # Logs folder
-LOGS_PATH_ACCESS        ="$LOGS_PATH/access.log" # Access log
-LOGS_PATH_ERROR         ="$LOGS_PATH/error.log" # Error log
-DEPLOY_PATH             ="$DOMAIN_PATH/deploy" # Deploy folder for deployment scripts
-FLAGS_PATH              ="$DEPLOY_PATH/flags" # Flags folder for deployment scripts
-FLAGS_WEBONLY_PATH      ="$DEPLOY_PATH/flags/web" # Flags folder for Apache to use for setting flags
-ARTIFACTS_PATH          ="$DEPLOY_PATH/artifacts" # Artifacts folder for deployment scripts that are used for copying over
-ARTIFACTS_WEB_PATH      ="$DEPLOY_PATH/artifacts/web" # Artifacts folder for deployment scripts that are used for copying over web-only resources
+# Check if environment file exists
+if [[ ! -f "$DOMAIN_ENV_PATH" ]]; then
+    echo "🟥 Environment file .env not found. Aborting."
+    exit 1
+fi
 
-APACHE_AVAILABLE_PATH   ="/etc/apache2/sites-available"
-VHOST_EXAMPLE_FILE      ="002-EXAMPLE.COM.conf"
-VHOST_DOMAIN_FILE       ="002-$DOMAIN.conf"
-VHOST_DOMAIN_FILE_PATH  ="$APACHE_AVAILABLE_PATH/$VHOST_DOMAIN_FILE"
-VHOST_EXAMPLE_FILE_PATH ="$APACHE_AVAILABLE_PATH/$VHOST_EXAMPLE_FILE"
-
-PHP_VERSION             =$(php -r "echo PHP_VERSION;" | cut -d'.' -f1,2) # Get PHP version
-PHP_CLI_CONFIG_PATH     ="/etc/php/$PHP_VERSION/cli/conf.d" # PHP CLI config path
-PHP_CLI_CUSTOM_INI_FILE ="99-custom.ini" # PHP CLI ini file
-PHP_CLI_CUSTOM_INI_PATH ="$PHP_CLI_CONFIG_PATH/$PHP_CLI_CUSTOM_INI_FILE" # Custom PHP ini file for CLI
+# Load environment variables
+source "$DOMAIN_ENV_PATH"
 
 # Ensure vhost does not already exist
-if [[ -f "$VHOST_DOMAIN_FILE_PATH" ]]; then
+if [[ -f "$VHOST_AVAILABLE_DOMAIN_FILE_PATH" ]]; then
     echo "🟥 Vhost already exists for $DOMAIN. Aborting."
     exit 1
 fi
 
 # Create vhost
 echo -e "\n 🟩  Creating domain vhost"
-sed "s/EXAMPLE.COM/$DOMAIN/g" $VHOST_EXAMPLE_FILE_PATH > "$VHOST_DOMAIN_FILE_PATH"
+sed "s/EXAMPLE.COM/$DOMAIN/g" $VHOST_AVAILABLE_EXAMPLE_FILE_PATH > "$VHOST_AVAILABLE_DOMAIN_FILE_PATH"
 
 # Create common folders
 echo -e "\n 🟩  Creating domain folders: public, logs, deploy, flags, artifacts"
@@ -107,12 +95,11 @@ chmod -R 130 $FLAGS_WEBONLY_PATH # Apache can write + execute directory
 # Update PHP open_basedir to allow PHP access to folders.
 echo -e "\n 🟩  Overriding PHP access (open_basedir) via vhost: public, logs, flags"
 
-
 PHP_OPEN_BASE_DIR_VALUE=$(grep -E '^[[:space:]]*open_basedir' "$PHP_CLI_CUSTOM_INI_PATH" | cut -d'=' -f2 | tr -d '[:space:]' | tr -d '"')
 NEW_OPEN_BASE_DIR="$PHP_OPEN_BASE_DIR_VALUE:$PUBLIC_PATH:$LOGS_PATH:$FLAGS_WEBONLY_PATH"
 
 # Append new base dir override to Vhost file under the DocumentRoot directive.
-sed -i "s|DocumentRoot.*|DocumentRoot $PUBLIC_PATH\n\n    php_admin_value open_basedir \"$NEW_OPEN_BASE_DIR\"|g" "$VHOST_DOMAIN_FILE_PATH"
+sed -i "s|DocumentRoot.*|DocumentRoot $PUBLIC_PATH\n\n    php_admin_value open_basedir \"$NEW_OPEN_BASE_DIR\"|g" "$VHOST_AVAILABLE_DOMAIN_FILE_PATH"
 
 # Enable vhost
 echo -e "\n 🟩  Enabling domain vhost"
