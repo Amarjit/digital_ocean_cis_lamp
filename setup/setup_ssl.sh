@@ -43,24 +43,17 @@ else
         -subj "/C=US/ST=State/L=City/O=Organization/OU=Department/CN=$DOMAIN"
 
     echo -e "\n 🟩  Creating self-signed vhost file"
+    NONE_SSL_VHOST_FILEPATH="/etc/apache2/sites-available/002-$DOMAIN.conf"
     SSL_FILENAME="002-$DOMAIN-selfsigned.conf"
     SSL_VHOST_FILEPATH="/etc/apache2/sites-available/$SSL_FILENAME"
-cat <<EOL > $SSL_VHOST_FILEPATH
-    <VirtualHost *:443>
-        ServerName $DOMAIN
-        ServerAlias www.$DOMAIN
 
-        DocumentRoot /var/www/$DOMAIN/public
+    # Copy original to new file
+    echo -e "\n 🟩  Copying original vhost file to self-signed vhost file"
+    cp $NONE_SSL_VHOST_FILEPATH $SSL_VHOST_FILEPATH
 
-        SSLEngine on
-        SSLCertificateFile $SSL_DIR/selfsigned.crt
-        SSLCertificateKeyFile $SSL_DIR/selfsigned.key
-
-        <Directory /var/www/$DOMAIN/public>
-            AllowOverride All
-        </Directory>
-    </VirtualHost>
-EOL
+    # Update the new file to use self-signed certs
+    echo -e "\n 🟩  Updating self-signed vhost file to use self-signed certs"
+    sed -i '/DocumentRoot /a \\n    SSLEngine on\n    SSLCertificateFile '"$SSL_DIR"'/selfsigned.crt\n    SSLCertificateKeyFile '"$SSL_DIR"'/selfsigned.key\n' $SSL_VHOST_FILEPATH
 
     echo -e "\n 🟩  Enabling self-signed vhost"
     a2ensite $SSL_FILENAME
