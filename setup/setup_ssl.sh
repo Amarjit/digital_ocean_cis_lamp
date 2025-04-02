@@ -42,7 +42,8 @@ else
         -subj "/C=US/ST=State/L=City/O=Organization/OU=Department/CN=$DOMAIN"
 
     echo -e "\n 🟩  Creating self-signed vhost file"
-    SSL_VHOST_FILEPATH="/etc/apache2/sites-available/002-$DOMAIN-selfsigned-ssl.conf"
+    SSL_FILENAME="002-$DOMAIN-selfsigned.conf"
+    SSL_VHOST_FILEPATH="/etc/apache2/sites-available/$SSL_FILENAME"
 cat <<EOL > $SSL_VHOST_FILEPATH
     <VirtualHost *:443>
         ServerName $DOMAIN
@@ -61,8 +62,7 @@ cat <<EOL > $SSL_VHOST_FILEPATH
 EOL
 
     echo -e "\n 🟩  Enabling self-signed vhost"
-    a2ensite 002-$DOMAIN-selfsigned.conf
-
+    a2ensite $SSL_FILENAME
 fi
 
 # Add SSL www redirect to none-www. This is required for SEO and security.
