@@ -21,7 +21,9 @@ SSL can be setup. There is no cost for this service.
 
 Before running the setup, ensure that .env file match your requirements. Make sure to check other configuration variables in the `setup.sh` file as well. The script has been tuned for low-footprint websites.
 
-If you do not enter a domain name and email address, the website creation and CertBot will be skipped. Apache and PHP will still be setup but without a default site.
+If you do not enter a domain name and cert type, the website creation and SSL certification will be skipped. Apache and PHP will still be setup but without a default site. Use 'local' for websites that are not used in production and 'live' for production websites.
+
+Local certs are self-signed and live certs use CertBot.
 
 Be careful with generating SSL certificates for the same domain too many times. LetsEncrypt has rate limiting enabled. Auto-renewal of SSL certificates is enabled.
 
@@ -39,4 +41,4 @@ To delete a website:
 
 Paste the single line command. It will prompt to enter domain and email address:
 
-    echo ">>> Enter your domain: " && read DOMAIN && echo ">>> Enter your email address: " && read EMAIL && sudo apt install git -y > /dev/null 2>&1 && cd ~ && git clone https://github.com/Amarjit/digital_ocean_cis_lamp.git && cd digital_ocean_cis_lamp && chmod +x setup.sh && ./setup.sh "$DOMAIN" "$EMAIL"
+    echo ">>> Enter your domain: " && read DOMAIN && echo ">>> Enter cert type (local/live): " && read CERT_TYPE && sudo apt install git -y > /dev/null 2>&1 && cd ~ && git clone https://github.com/Amarjit/digital_ocean_cis_lamp.git && cd digital_ocean_cis_lamp && chmod +x setup.sh && ./setup.sh "$DOMAIN" "$CERT_TYPE"
