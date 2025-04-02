@@ -1,7 +1,6 @@
 #!/bin/bash
 
 DOMAIN=$1
-CERT_TYPE=$2
 
 # Ensure DOMAIN is set
 if [[ -z "$DOMAIN" ]]; then
@@ -9,72 +8,23 @@ if [[ -z "$DOMAIN" ]]; then
     exit 1
 fi
 
-# Ensure CERT_TYPE is set to either "live" or "local"
-if [[ -z "$CERT_TYPE" ]]; then
-    echo "🟥 CERT_TYPE is not set. Aborting."
-    exit 1
-fi
-
-if [[ "$CERT_TYPE" != "live" && "$CERT_TYPE" != "local" ]]; then
-    echo "🟥 CERT_TYPE must be either 'live' or 'local'. Aborting."
-    exit 1
-fi
-
 # SSL Setup with Certbot. CertBot will take care of creating new 443 vhost and enabling SSL. Will also add redirect to existing vhost from 80 to 443.
 echo -e "\n 🟩  Installing Certbot for SSL"
-apt install certbot python3-certbot-apache -y > /dev/null 2>&1
-
-if [[ "$CERT_TYPE" == "live" ]]; then
-    echo -e "\n 🟩  Setting up live SSL for $DOMAIN"
-    # Certbot will automatically create a new vhost file for SSL and enable it.
-    certbot --apache -d $DOMAIN -d www.$DOMAIN --agree-tos --register-unsafely-without-email --non-interactive
-    SSL_VHOST_FILEPATH="/etc/apache2/sites-available/002-$DOMAIN-le-ssl.conf"
-else
-    echo -e "\n 🟩  Setting up self-signed SSL for $DOMAIN"
-
-    echo -e "\n 🟩  Creating self-signed directory for domain"
-    SSL_DIR="/etc/ssl/$DOMAIN"
-    mkdir -p $SSL_DIR
-
-    echo -e "\n 🟩  Generating self-signed certificates"
-    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-        -keyout $SSL_DIR/selfsigned.key \
-        -out $SSL_DIR/selfsigned.crt \
-        -subj "/C=US/ST=State/L=City/O=Organization/OU=Department/CN=$DOMAIN"
-
-    echo -e "\n 🟩  Creating self-signed vhost file"
-    NONE_SSL_VHOST_FILEPATH="/etc/apache2/sites-available/002-$DOMAIN.conf"
-    SSL_FILENAME="002-$DOMAIN-selfsigned.conf"
-    SSL_VHOST_FILEPATH="/etc/apache2/sites-available/$SSL_FILENAME"
-
-    # Copy original to new file
-    echo -e "\n 🟩  Copying original vhost file to self-signed vhost file"
-    cp $NONE_SSL_VHOST_FILEPATH $SSL_VHOST_FILEPATH
-
-    # Update the new file to use self-signed certs
-    echo -e "\n 🟩  Updating self-signed vhost file to use self-signed certs"
-    sed -i '/DocumentRoot /a \\n    SSLEngine on\n    SSLCertificateFile '"$SSL_DIR"'/selfsigned.crt\n    SSLCertificateKeyFile '"$SSL_DIR"'/selfsigned.key\n' $SSL_VHOST_FILEPATH
-
-    ## Update vhost to use port 443 instead of 80
-    echo -e "\n 🟩  Updating self-signed vhost file to use port 443"
-    sed -i 's/<VirtualHost \*:80>/<VirtualHost \*:443>/' $SSL_VHOST_FILEPATH
-
-    echo -e "\n 🟩  Enabling self-signed vhost"
-    a2ensite $SSL_FILENAME
-fi
+apt install certbot python3-certbot-apache -y >/dev/null 2>&1
+certbot --apache -d $DOMAIN -d www.$DOMAIN --agree-tos --register-unsafely-without-email --non-interactive
 
 # Add SSL www redirect to none-www. This is required for SEO and security.
 echo -e "\n 🟩  Adding SSL www redirect to none-www SSL."
+SSL_VHOST_FILEPATH="/etc/apache2/sites-available/002-$DOMAIN-le-ssl.conf"
 sed -i '/DocumentRoot /a \\n    RewriteEngine On\n    RewriteCond %{HTTP_HOST} ^www\\.(.*)$ [NC]\n    RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]\n' $SSL_VHOST_FILEPATH
 
 # Enable Certbot auto-renewal
 echo -e "\n 🟩  Enabling Certbot auto-renewal"
 systemctl enable certbot.timer
 systemctl start certbot.timer
-certbot renew --dry-run
 
-# Restart Apache to apply changes
-echo -e "\n 🟩  Reloading Apache to apply changes"
-systemctl reload apache2
+# Test Certbot auto-renewal
+echo -e "\n 🟩  Testing Certbot auto-renewal (dry run)"
+certbot renew --dry-run
 
 echo -e "\n ✅  Certbot complete."
