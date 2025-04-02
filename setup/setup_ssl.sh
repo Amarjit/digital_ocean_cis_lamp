@@ -28,6 +28,7 @@ if [[ "$CERT_TYPE" == "live" ]]; then
     echo -e "\n 🟩  Setting up live SSL for $DOMAIN"
     # Certbot will automatically create a new vhost file for SSL and enable it.
     certbot --apache -d $DOMAIN -d www.$DOMAIN --agree-tos --register-unsafely-without-email --non-interactive
+    SSL_VHOST_FILEPATH="/etc/apache2/sites-available/002-$DOMAIN-le-ssl.conf"
 else
     echo -e "\n 🟩  Setting up self-signed SSL for $DOMAIN"
 
@@ -67,7 +68,6 @@ fi
 
 # Add SSL www redirect to none-www. This is required for SEO and security.
 echo -e "\n 🟩  Adding SSL www redirect to none-www SSL."
-SSL_VHOST_FILEPATH="/etc/apache2/sites-available/002-$DOMAIN-le-ssl.conf"
 sed -i '/DocumentRoot /a \\n    RewriteEngine On\n    RewriteCond %{HTTP_HOST} ^www\\.(.*)$ [NC]\n    RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]\n' $SSL_VHOST_FILEPATH
 
 # Enable Certbot auto-renewal
