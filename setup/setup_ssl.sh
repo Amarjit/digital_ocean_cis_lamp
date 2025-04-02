@@ -55,6 +55,10 @@ else
     echo -e "\n 🟩  Updating self-signed vhost file to use self-signed certs"
     sed -i '/DocumentRoot /a \\n    SSLEngine on\n    SSLCertificateFile '"$SSL_DIR"'/selfsigned.crt\n    SSLCertificateKeyFile '"$SSL_DIR"'/selfsigned.key\n' $SSL_VHOST_FILEPATH
 
+    ## Update vhost to use port 443 instead of 80
+    echo -e "\n 🟩  Updating self-signed vhost file to use port 443"
+    sed -i 's/<VirtualHost \*:80>/<VirtualHost \*:443>/' $SSL_VHOST_FILEPATH
+
     echo -e "\n 🟩  Enabling self-signed vhost"
     a2ensite $SSL_FILENAME
 fi
