@@ -3,6 +3,23 @@
  # Get env.
 source .env
 
+# Paths
+APACHE_DEFAULT_SITE="000-default.conf"
+APACHE_DEFAULT_WWW_FOLDER="/var/www"
+APACHE_DEFAULT_HTML_FOLDER="$APACHE_DEFAULT_WWW_FOLDER/html"
+
+APACHE_AVAILABLE_CONF_PATH="/etc/apache2/conf-available"
+APACHE_AVAILABLE_CUSTOM_CONF_FILE="zzz-custom.conf" # Use zzz so loaded last and overwrites.
+APACHE_AVAILABLE_CONF_FILE_PATH="$APACHE_AVAILABLE_CONF_PATH/$APACHE_AVAILABLE_CUSTOM_CONF_FILE"
+
+APACHE_AVAILABLE_PATH="/etc/apache2/sites-available"
+APACHE_AVAILABLE_BLOCK_DEFAULTS_FILE="999-block.conf" # Use 999 so loaded last so other vhosts can be matched.
+APACHE_AVAILABLE_BLOCK_DEFAULTS_FILE_PATH="$APACHE_AVAILABLE_PATH/$APACHE_AVAILABLE_BLOCK_DEFAULTS_FILE"
+
+EXAMPLE_DOMAIN="EXAMPLE.COM"
+EXAMPLE_DOMAIN_FILE="002-$EXAMPLE_DOMAIN.conf" # We want all vhosts to be above 999-block.conf
+APACHE_AVAILABLE_EXAMPLE_DOMAIN_FILE_PATH="$APACHE_AVAILABLE_PATH/$EXAMPLE_DOMAIN_FILE"
+
 # Install Apache
 echo -e "\n 🟩  Installing Apache"
 apt install apache2 -y > /dev/null 2>&1
@@ -28,7 +45,7 @@ a2dismod dav_fs
 
 # Apache Security: Additional hardening. Using custom config file to avoid modifying default Apache files.
 echo -e "\n 🟩  Setting up custom security conf"
-tee /etc/apache2/conf-available/zzz-custom.conf > /dev/null <<EOF
+tee "$APACHE_AVAILABLE_CONF_FILE_PATH" > /dev/null <<EOF
     # Default server.
     ServerName 127.0.0.1
 
@@ -80,7 +97,7 @@ EOF
 
 # Apache Catch All Virtual Host - Apache serves default website from /var/www for unmatched vhosts. Blocks Apache serving default. (e.g. non-defined www). 999 for last rule
 echo -e "\n 🟩  Creating catch-all vhost to reject unmatched requests"
-tee /etc/apache2/sites-available/999-block.conf > /dev/null <<EOL
+tee "$APACHE_AVAILABLE_BLOCK_DEFAULTS_FILE_PATH" > /dev/null <<EOL
 <VirtualHost *:80>
     ServerName _
     <Location />
@@ -97,10 +114,8 @@ tee /etc/apache2/sites-available/999-block.conf > /dev/null <<EOL
 EOL
 
 # Create example vhost config for HTTP site.
-EXAMPLE_DOMAIN="EXAMPLE.COM"
-EXAMPLE_DOMAIN_FILENAME="002-EXAMPLE.COM.conf" # We want all vhosts to be above 999-block.conf
 echo -e "\n 🟩  Creating HTTP (80) example vhost for domain"
-tee /etc/apache2/sites-available/$EXAMPLE_DOMAIN_FILENAME > /dev/null <<EOL
+tee "$APACHE_AVAILABLE_EXAMPLE_DOMAIN_FILE_PATH" > /dev/null <<EOL
 <VirtualHost *:80>
     ServerName $EXAMPLE_DOMAIN
     ServerAlias www.$EXAMPLE_DOMAIN
@@ -144,20 +159,20 @@ EOL
 
 # Manage sites and conf.
 echo -e "\n 🟩  Enabling custom security conf and catch-all vhost"
-a2enconf zzz-custom.conf
-a2ensite 999-block.conf
+a2enconf $APACHE_AVAILABLE_CUSTOM_CONF_FILE
+a2ensite $APACHE_AVAILABLE_BLOCK_DEFAULTS_FILE
 
 echo -e "\n 🟩  Disabling default site"
-a2dissite 000-default.conf
+a2dissite $APACHE_DEFAULT_SITE
 
 # Delete default html folder. html folders are now "public" and live in domain folders.
 echo -e "\n 🟩  Deleting default html folder"
-rm -rf /var/www/html
+rm -rf $APACHE_DEFAULT_HTML_FOLDER
 
 # Adjust permissions
 echo -e "\n 🟩  Setting permissions"
-chown -R root:www-data /var/www
-chmod -R 110 /var/www # execute-only
+chown -R root:www-data $APACHE_DEFAULT_WWW_FOLDER
+chmod -R 110 $APACHE_DEFAULT_WWW_FOLDER # execute-only
 
 # Enable Apache
 echo -e "\n 🟩  Adding Apache to boot"
