@@ -40,9 +40,9 @@ VHOST_ENABLED_DOMAIN_SELFCERT_FILE_PATH="$APACHE_ENABLED_PATH/$VHOST_DOMAIN_SELF
 
 # PHP
 PHP_VERSION=$(php -r "echo PHP_VERSION;" | cut -d'.' -f1,2) # Get PHP version
-PHP_CLI_CONFIG_PATH="/etc/php/$PHP_VERSION/cli/conf.d" # PHP CLI config path
-PHP_CLI_CUSTOM_INI_FILE="99-custom.ini" # PHP CLI ini file
-PHP_CLI_CUSTOM_INI_PATH="$PHP_CLI_CONFIG_PATH/$PHP_CLI_CUSTOM_INI_FILE" # Custom PHP ini file for CLI
+PHP_APACHE_CONFIG_PATH="/etc/php/$PHP_VERSION/apache2/conf.d" # PHP CLI config path
+PHP_APACHE_CUSTOM_INI_FILE="99-custom.ini" # PHP CLI ini file
+PHP_APACHE_CUSTOM_INI_PATH="$PHP_APACHE_CONFIG_PATH/$PHP_APACHE_CUSTOM_INI_FILE" # Custom PHP ini file for Apache2 PHP config
 
 # SSL
 LETSENCRYPT_PATH="/etc/letsencrypt/live" # Live SSL path for Let's Encrypt. DO NOT modify.

@@ -94,8 +94,7 @@ chmod -R 130 $FLAGS_WEBONLY_PATH # Apache can write + execute directory
 
 # Update PHP open_basedir to allow PHP access to folders.
 echo -e "\n 🟩  Overriding PHP access (open_basedir) via vhost: public, logs, flags"
-
-PHP_OPEN_BASE_DIR_VALUE=$(grep -E '^[[:space:]]*open_basedir' "$PHP_CLI_CUSTOM_INI_PATH" | cut -d'=' -f2 | tr -d '[:space:]' | tr -d '"')
+PHP_OPEN_BASE_DIR_VALUE=$(grep -E '^[[:space:]]*open_basedir' "$PHP_APACHE_CUSTOM_INI_PATH" | cut -d'=' -f2 | tr -d '[:space:]' | tr -d '"')
 NEW_OPEN_BASE_DIR="$PHP_OPEN_BASE_DIR_VALUE:$PUBLIC_PATH:$LOGS_PATH:$FLAGS_WEBONLY_PATH"
 
 # Append new base dir override to Vhost file under the DocumentRoot directive.
