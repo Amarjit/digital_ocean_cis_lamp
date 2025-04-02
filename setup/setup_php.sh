@@ -7,10 +7,18 @@ source .env
 echo -e "\n 🟩  Installing PHP"
 apt install php libapache2-mod-php -y > /dev/null 2>&1
 
-# Get the active PHP version
+# Paths
 PHP_VERSION=$(php -r "echo PHP_VERSION;" | cut -d'.' -f1,2)
-PHP_CUSTOM_INI_CLI="/etc/php/$PHP_VERSION/cli/conf.d/99-custom.ini"
-PHP_CUSTOM_INI_APACHE2="/etc/php/$PHP_VERSION/apache2/conf.d/99-custom.ini"
+PHP_CUSTOM_INI_FILENAME="99-custom.ini"
+PHP_CLI_CONFIG_PATH="/etc/php/$PHP_VERSION/cli/conf.d" # PHP CLI config path
+PHP_APACHE_CONFIG_PATH="/etc/php/$PHP_VERSION/apache2/conf.d" # PHP Apache config path
+
+PHP_CUSTOM_INI_CLI="$PHP_CLI_CONFIG_PATH/$PHP_CUSTOM_INI_FILENAME"
+PHP_CUSTOM_INI_APACHE2="$PHP_APACHE_CONFIG_PATH/$PHP_CUSTOM_INI_FILENAME"
+
+PHP_SESSIONS_PATH="/var/lib/php/sessions" # PHP sessions path
+PHP_ERROR_LOG_FILE="/var/log/php_errors.log"
+TEMP_FOLDER="/tmp"
 
 # PHP Security: Additional Hardening
 echo -e "\n 🟩  Securing PHP"
@@ -32,19 +40,19 @@ tee $PHP_CUSTOM_INI_CLI > /dev/null <<EOF
     session.cookie_secure=1
     session.cookie_httponly=1
     session.use_only_cookies=1
-    session.save_path="/var/lib/php/sessions"
+    session.save_path="$PHP_SESSIONS_PATH"
     session.gc_maxlifetime=$PHP_GC_SESSION_LIFETIME
-    open_basedir="/tmp:/var/lib/php/sessions"
+    open_basedir="$TEMP_FOLDER:$PHP_SESSIONS_PATH"
     memory_limit=$PHP_MEMORY_LIMIT
     log_errors=On
-    error_log=/var/log/php_errors.log
+    error_log=$PHP_ERROR_LOG_FILE
 EOF
 
 echo -e "\n 🟩  Creating custom PHP ini file for PHP Apache"
 cp $PHP_CUSTOM_INI_CLI $PHP_CUSTOM_INI_APACHE2
 
-chmod 770 /var/lib/php/sessions # read, write, execute
-chown root:www-data /var/lib/php/sessions
+chmod 770 $PHP_SESSIONS_PATH # read, write, execute
+chown root:www-data $PHP_SESSIONS_PATH
 
 # Reload if Apache available
 if command -v apache2 >/dev/null 2>&1; then
