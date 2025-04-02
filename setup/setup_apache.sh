@@ -130,10 +130,13 @@ tee /etc/apache2/sites-available/$EXAMPLE_DOMAIN_FILENAME > /dev/null <<EOL
         # Remove .php extension from URLs
         RewriteCond %{REQUEST_FILENAME} !-d
         RewriteCond %{REQUEST_FILENAME}\.php -f
+        RewriteCond %{REQUEST_URI} !-f
         RewriteRule ^(.*)$ $1.php [L]
 
         # Redirect requests with .php to clean URLs
         RewriteCond %{THE_REQUEST} "^[^ ]* .*?\.php[? ].*$"
+        RewriteCond %{REQUEST_URI} !/index\.php$
+        RewriteCond %{REQUEST_URI} !-f
         RewriteRule ^(.*)\.php$ /$1 [L,R=301]
     </Directory>        
 </VirtualHost>
