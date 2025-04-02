@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DOMAIN=$1
-CERT_TYPE=$3
+CERT_TYPE=$2
 
 # Update system. Non-interactive and upgrade all packages regardless of custom versions.
 echo -e "\n 🟩  Updating system"
@@ -15,7 +15,7 @@ echo -e "\n 🟩  Running setup scripts"
 ./setup/setup_apache.sh
 ./setup/setup_php.sh
 
-# If domain and email are provided, setup website and SSL.
+# If domain and cert type are provided, setup website and SSL.
 if [ -n "$DOMAIN" ] && [ -n "$CERT_TYPE" ]; then
     echo -e "\n 🟩  Setting up website"
     ./setup/setup_website.sh $DOMAIN
@@ -23,7 +23,7 @@ if [ -n "$DOMAIN" ] && [ -n "$CERT_TYPE" ]; then
     echo -e "\n 🟩  Setting up SSL (CertBot)"
     ./setup/setup_ssl.sh $DOMAIN $CERT_TYPE
 else
-    echo -e "\n 🟨  Domain, email or certification type not provided. Skipping website and SSL setup."
+    echo -e "\n 🟨  Domain or certification type not provided. Skipping website and SSL setup."
 fi
 
 echo -e "\n ✅  LAMP stack setup complete."
