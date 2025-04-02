@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Common path structure
 DOMAIN                  =$1 # Domain name (e.g. example.com)
 WWW_PATH                ="/var/www" # All domain folders are stored here with their config.
