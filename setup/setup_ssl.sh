@@ -42,7 +42,7 @@ else
         -subj "/C=US/ST=State/L=City/O=Organization/OU=Department/CN=$DOMAIN"
 
     echo -e "\n 🟩  Creating self-signed vhost file"
-    VHOSTSSL_VHOST_FILEPATH_FILE="/etc/apache2/sites-available/002-$DOMAIN-selfsigned-ssl.conf"
+    SSL_VHOST_FILEPATH="/etc/apache2/sites-available/002-$DOMAIN-selfsigned-ssl.conf"
 cat <<EOL > $SSL_VHOST_FILEPATH
     <VirtualHost *:443>
         ServerName $DOMAIN
