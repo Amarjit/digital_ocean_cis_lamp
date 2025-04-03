@@ -8,7 +8,7 @@ echo -e "\n 🟩  Updating system"
 DEBIAN_FRONTEND=noninteractive apt update > /dev/null 2>&1 && sudo DEBIAN_FRONTEND=noninteractive apt full-upgrade -y > /dev/null 2>&1
 
 # Set execute permissions.
-chmod +x setup/setup_apache.sh setup/setup_php.sh setup/setup_website.sh setup/setup_ssl.sh setup/setup_ssl_selfcert.sh
+chmod +x setup/setup_apache.sh setup/setup_php.sh setup/setup_website.sh setup/setup_ssl.sh setup/setup_ssl_selfcert.sh setup/setup_domain_env.sh
 
 # Run setup scripts.
 echo -e "\n 🟩  Running setup scripts"
@@ -18,6 +18,9 @@ echo -e "\n 🟩  Running setup scripts"
 # If domain and cert type are provided, setup website and SSL.
 
 if [ -n "$DOMAIN" ] && ([[ "$CERT_TYPE" == "local" ]] || [[ "$CERT_TYPE" == "live" ]]); then
+    echo -e "\n 🟩  Setting up domain environment"
+    ./setup/setup_domain_env.sh $DOMAIN
+
     echo -e "\n 🟩  Setting up website"
     ./setup/setup_website.sh $DOMAIN
 
