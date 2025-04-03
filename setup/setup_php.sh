@@ -22,7 +22,7 @@ TEMP_FOLDER="/tmp"
 
 # PHP Security: Additional Hardening
 echo -e "\n 🟩  Securing PHP"
-echo -e "\n 🟩  Creating custom PHP ini file for PHP CLI"
+echo -e "\n 🟩  Creating custom PHP ini file for PHP CLI (PHP running via command line)"
 
 tee $PHP_CUSTOM_INI_CLI > /dev/null <<EOF
     disable_functions=exec,shell_exec,system,passthru,popen,proc_open,proc_close,proc_get_status,proc_nice,proc_terminate,curl_exec,parse_ini_file,show_source,pcntl_exec,dl,putenv,symlink,link,readlink,escapeshellarg,escapeshellcmd,leak,posix_getpwuid,posix_getpwnam
