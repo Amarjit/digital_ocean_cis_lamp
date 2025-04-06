@@ -1,12 +1,13 @@
 #!/bin/bash
 
  # Get env.
-source .env
+source ../.env
 
 # Paths
 APACHE_DEFAULT_SITE="000-default.conf"
 APACHE_DEFAULT_WWW_FOLDER="/var/www"
 APACHE_DEFAULT_HTML_FOLDER="$APACHE_DEFAULT_WWW_FOLDER/html"
+
 
 APACHE_AVAILABLE_CONF_PATH="/etc/apache2/conf-available"
 APACHE_AVAILABLE_CUSTOM_CONF_FILE="zzz-custom.conf" # Use zzz so loaded last and overwrites.
@@ -17,8 +18,12 @@ APACHE_AVAILABLE_BLOCK_DEFAULTS_FILE="999-block.conf" # Use 999 so loaded last s
 APACHE_AVAILABLE_BLOCK_DEFAULTS_FILE_PATH="$APACHE_AVAILABLE_PATH/$APACHE_AVAILABLE_BLOCK_DEFAULTS_FILE"
 
 EXAMPLE_DOMAIN="EXAMPLE.COM"
+EXAMPLE_PUBLIC_PATH="/var/www/$EXAMPLE_DOMAIN/public"
+EXAMPLE_LOGS_ACCESS_PATH="/var/www/$EXAMPLE_DOMAIN/logs/access.log"
+EXAMPLE_LOGS_ERROR_PATH="/var/www/$EXAMPLE_DOMAIN/logs/error.log"
 EXAMPLE_DOMAIN_FILE="002-$EXAMPLE_DOMAIN.conf" # We want all vhosts to be above 999-block.conf
 APACHE_AVAILABLE_EXAMPLE_DOMAIN_FILE_PATH="$APACHE_AVAILABLE_PATH/$EXAMPLE_DOMAIN_FILE"
+
 
 # Install Apache
 echo -e "\n 🟩  Installing Apache"
@@ -121,16 +126,16 @@ tee "$APACHE_AVAILABLE_EXAMPLE_DOMAIN_FILE_PATH" > /dev/null <<EOL
     ServerAlias www.$EXAMPLE_DOMAIN
 
     # Public folder should contain servable files. e.g. index.php. Domain folder can be used for configuration files, logs, deployment, etc.
-    DocumentRoot /var/www/$EXAMPLE_DOMAIN/public
+    DocumentRoot $EXAMPLE_PUBLIC_PATH
 
     # Access log.
-    CustomLog /var/www/$EXAMPLE_DOMAIN/logs/access.log combined
+    CustomLog $EXAMPLE_LOGS_ACCESS_PATH combined
 
     # Error log.
-    ErrorLog /var/www/$EXAMPLE_DOMAIN/logs/error.log
+    ErrorLog $EXAMPLE_LOGS_ERROR_PATH
 
     # Explicitly define behavior for the main website directory
-    <Directory "/var/www/$EXAMPLE_DOMAIN/public">
+    <Directory "$EXAMPLE_PUBLIC_PATH">
         AllowOverride AuthConfig Limit FileInfo
         Options -Indexes
         Options +FollowSymLinks
