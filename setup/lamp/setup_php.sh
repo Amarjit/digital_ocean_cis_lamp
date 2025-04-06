@@ -7,18 +7,12 @@ source ../.env
 echo -e "\n 🟩  Installing PHP"
 apt install php libapache2-mod-php -y > /dev/null 2>&1
 
-# Paths
+# Dynamic paths.
 PHP_VERSION=$(php -r "echo PHP_VERSION;" | cut -d'.' -f1,2)
-PHP_CUSTOM_INI_FILENAME="99-custom.ini"
 PHP_CLI_CONFIG_PATH="/etc/php/$PHP_VERSION/cli/conf.d" # PHP CLI config path
 PHP_APACHE_CONFIG_PATH="/etc/php/$PHP_VERSION/apache2/conf.d" # PHP Apache config path
-
 PHP_CUSTOM_INI_CLI="$PHP_CLI_CONFIG_PATH/$PHP_CUSTOM_INI_FILENAME"
 PHP_CUSTOM_INI_APACHE2="$PHP_APACHE_CONFIG_PATH/$PHP_CUSTOM_INI_FILENAME"
-
-PHP_SESSIONS_PATH="/var/lib/php/sessions" # PHP sessions path
-PHP_ERROR_LOG_FILE="/var/log/php_errors.log"
-TEMP_FOLDER="/tmp"
 
 # PHP Security: Additional Hardening
 echo -e "\n 🟩  Securing PHP"
