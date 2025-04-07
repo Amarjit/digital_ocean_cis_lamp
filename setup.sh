@@ -24,7 +24,7 @@ if [ -n "$DOMAIN" ] && ([[ "$CERT_TYPE" == "local" ]] || [[ "$CERT_TYPE" == "liv
     ./setup/domain/setup_domain_env.sh $DOMAIN
 
     echo -e "\n 🟩  Setting up website"
-    ./setup/domain/setup_website.sh $DOMAIN
+    ./setup/domain/website/setup_website.sh $DOMAIN
 
     # Check if cert type is self-signed or certbot
     if [[ "$CERT_TYPE" == "local" ]]; then
