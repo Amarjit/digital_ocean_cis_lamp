@@ -1,7 +1,7 @@
 #!/bin/bash
 
  # Get env.
-source ../.env
+source .env
 
 # Paths
 APACHE_DEFAULT_SITE="000-default.conf"

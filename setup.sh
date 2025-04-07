@@ -9,7 +9,7 @@ DEBIAN_FRONTEND=noninteractive apt update > /dev/null 2>&1 && sudo DEBIAN_FRONTE
 
 # Set execute permissions.
 chmod +x setup/lamp/setup_apache.sh setup/lamp/setup_php.sh 
-chmod +x setup/domain/website/setup_website.sh setup/domain/website/setup_domain_env.sh setup/domain/website/delete_website.sh
+chmod +x setup/domain/website/setup_website.sh setup/domain/setup_domain_env.sh setup/domain/website/delete_website.sh
 chmod +x setup/domain/ssl/setup_ssl.sh setup/domain/ssl/setup_ssl_selfcert.sh 
 
 # Run setup scripts.
