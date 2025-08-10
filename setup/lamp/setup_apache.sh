@@ -147,17 +147,17 @@ tee "$APACHE_AVAILABLE_EXAMPLE_DOMAIN_FILE_PATH" > /dev/null <<EOL
         RewriteCond %{THE_REQUEST} "^[A-Z]{3,9} /(.*/)?index(\.php)?(\?.*)? HTTP/"
         RewriteRule ^(.*/)?index(\.php)?$ /%1 [R=301,L]
 
-        # Remove .php extension from URLs
+        # Redirect requests with .php to clean URLs
+        RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[?\s]
+        RewriteCond %{REQUEST_URI} !/index\.php$
+        RewriteCond %{REQUEST_URI} !-f
+        RewriteRule ^(.+)\.php$ /%1 [L,R=301]
+
+        # Remove .php extension from URLs (internal rewrite)
         RewriteCond %{REQUEST_FILENAME} !-d
         RewriteCond %{REQUEST_FILENAME}\.php -f
         RewriteCond %{REQUEST_URI} !-f
-        RewriteRule ^(.*)$ $1.php [L]
-
-        # Redirect requests with .php to clean URLs
-        RewriteCond %{THE_REQUEST} "^[^ ]* .*?\.php[? ].*$"
-        RewriteCond %{REQUEST_URI} !/index\.php$
-        RewriteCond %{REQUEST_URI} !-f
-        RewriteRule ^(.*)\.php$ /$1 [L,R=301]
+        RewriteRule ^(.+)$ $1.php [L]
     </Directory>        
 </VirtualHost>
 EOL
